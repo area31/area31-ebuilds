@@ -29,6 +29,6 @@ http://www.funtoo.org/Local_Overlay
 
 # 5- Keep updated:
 
-~~~
+~~~~
 # cd /var/overlay/area31-ebuilds && git pull
-~~
+~~~~
