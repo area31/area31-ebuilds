@@ -31,7 +31,7 @@ if [ "${CHECK_SYS}" = "0" ]; then
 fi
 
 
-if [ "${MNTDIR}/bin/bashlogin" -e]; then
+if [ -e "${MNTDIR}/bin/bashlogin" ]; then
 	chroot ${MNTDIR} /bin/bashlogin
 else
 	chroot ${MNTDIR} /bin/bash
