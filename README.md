@@ -20,7 +20,7 @@ http://www.funtoo.org/Local_Overlay
 # echo 'PORTDIR_OVERLAY="/var/overlay/area31-ebuilds/local"' >> /etc/make.conf
 ~~~~
 
-# 4- Update your database:
+# 4- Update your Portage Cache (eix database):
 
 ~~~
 # emerge app-portage/eix
