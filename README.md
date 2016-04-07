@@ -27,3 +27,6 @@ http://www.funtoo.org/Local_Overlay
 # eix-update
 ~~~
 
+5- Keep updated:
+
+# cd /var/overlay/area31-ebuilds && git pull
