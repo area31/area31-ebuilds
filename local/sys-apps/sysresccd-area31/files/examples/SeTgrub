@@ -1,0 +1,89 @@
+#!/bin/bash
+PATH="$PATH:/mnt/setup"
+export PATH;
+
+SETUP_DIR="/mnt/setup"
+TMP_INSTALL="${SETUP_DIR}/tmp"
+LIVECD_ROOT_FS="/mnt/livecd/yaxkin"
+
+SELECIONADO=`cat ${TMP_INSTALL}/SeTversion`
+VERSAO_ATUAL=`ls ${LIVECD_ROOT_FS}/${SELECIONADO}/*amd64-*bz2|cut -d'-' -f4|sed s,'.tar.bz2',,g`
+
+NOME_SELECIONADO=`echo ${SELECIONADO} |sed s,server,Server,g |sed s,desktop,Desktop,g`
+YAXKIN_VERSION="Yaxkin Linux ${NOME_SELECIONADO} ${VERSAO_ATUAL}"
+
+DIR_SYSTEM="/mnt/yaxkin"
+CHROOT_YAXKIN="chroot /mnt/yaxkin"
+MSG_PAUSE="Pressione uma tecla para continuar..."
+ERROR="0"
+DATA=`date +%d-%m-%Y`
+
+DIRLOG="${SETUP_DIR}/log"
+ERRORLOG="${DIRLOG}/error.log"
+
+
+VERSAO_KERNEL_ATUAL=`grep kernel-genkernel-x86_64 ${LIVECD_ROOT_FS}/${SELECIONADO}/*CONTENTS|cut -d" " -f8|sed s,'./boot/kernel-genkernel-x86_64-',,g`
+
+DEV_ROOT=`cat ${TMP_INSTALL}/SeTrootdev`
+FS_ROOT_INSTALL=`cat ${TMP_INSTALL}/SeTrootfs`
+DEV_BOOT=$( grep -w '/boot' ${TMP_INSTALL}/SeTnative |cut -d' ' -f1 |sed s,'/dev/',,g )
+DEV_MOUNTED_FLAG_BOOT=$( fdisk -l|grep '*'|cut -d' ' -f1 |sed s,'/dev/',,g|grep -vw Units|sed s,[0-99],,g )
+PARTITION_MOUNTED_FLAG_BOOT=$( fdisk -l|grep '*'|cut -d' ' -f1 |sed s,'/dev/',,g|grep -vw Units|sed s,sd[a-d],,g )
+
+# Define dispositivo com FLAG de boot
+if [ ${DEV_MOUNTED_FLAG_BOOT} = "sda" ]; then
+DISK_BOOTFLAG="0"
+
+elif [ ${DEV_MOUNTED_FLAG_BOOT} = "sdb" ]; then
+DISK_BOOTFLAG="1"
+
+elif [ ${DEV_MOUNTED_FLAG_BOOT} = "sdc" ]; then
+DISK_BOOTFLAG="2"
+
+elif [ ${DEV_MOUNTED_FLAG_BOOT} = "sdd" ]; then
+DISK_BOOTFLAG="3"
+fi
+
+# Define partição com FLAG de boot
+if [ ${PARTITION_MOUNTED_FLAG_BOOT} = "1" ]; then
+PARTITION_BOOTFLAG="0"
+
+elif [ ${PARTITION_MOUNTED_FLAG_BOOT} = "2" ]; then
+PARTITION_BOOTFLAG="1"
+
+elif [ ${PARTITION_MOUNTED_FLAG_BOOT} = "3" ]; then
+PARTITION_BOOTFLAG="2"
+
+elif [ ${PARTITION_MOUNTED_FLAG_BOOT} = "4" ]; then
+PARTITION_BOOTFLAG="3"
+fi
+
+DEV_BOOT_GRUB_SET="(hd${DISK_BOOTFLAG},${PARTITION_BOOTFLAG})"
+####################################################################################
+cp ${SETUP_DIR}/templates/boot/grub/grub.conf.template ${TMP_INSTALL}/grub.conf
+
+# definindo versão do kernel
+sed -i s,{VERSAO},${VERSAO_KERNEL_ATUAL},g ${TMP_INSTALL}/grub.conf
+
+# definindo nome da versão do yaxkin
+sed -i s,{VERSAO_YAXKIN},"${NOME_SELECIONADO} ${VERSAO_ATUAL}",g ${TMP_INSTALL}/grub.conf
+
+# definindo partição
+sed -i s,{ROOT},"${DEV_ROOT}",g ${TMP_INSTALL}/grub.conf
+
+# definindo HD onde está a partição /boot (hdx,y)
+sed -i s/{HD_BOOT}/"${DEV_BOOT_GRUB_SET}"/g ${TMP_INSTALL}/grub.conf
+
+# define tipo de partição
+sed -i s,{FS_ROOT},"${FS_ROOT_INSTALL}",g ${TMP_INSTALL}/grub.conf
+
+# copiando grub.conf para o diretorio do yaxkin
+cp ${TMP_INSTALL}/grub.conf ${DIR_SYSTEM}/boot/grub/grub.conf
+
+# Instalando o grub na MBR
+dialog --title " Yaxkin Linux " --backtitle "Criando arquivos de configuração do Yaxkin Linux" --infobox "\nInstalando grub na MBR do HD ${DEV_MOUNTED_FLAG_BOOT}${PARTITION_MOUNTED_FLAG_BOOT}..." 5 60 && sleep 1
+sleep 1
+cp ${SETUP_DIR}/setup-grub ${DIR_SYSTEM}/tmp
+${CHROOT_YAXKIN} /tmp/setup-grub
+rm -rf ${DIR_SYSTEM}/tmp/*
+

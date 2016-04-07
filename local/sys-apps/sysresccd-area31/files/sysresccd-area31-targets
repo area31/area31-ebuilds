@@ -1,0 +1,106 @@
+#!/bin/bash
+
+VERSION="0.2"
+MNTDIR="/mnt/custom/customcd/files"
+
+mountdisk(){
+sh /usr/share/sysresccd-area31/sysresccd-area31-umount
+sh /usr/share/sysresccd-area31/sysresccd-area31-mount
+}
+
+umountdisk(){
+sh /usr/share/sysresccd-area31/sysresccd-area31-umount
+swapoff -a
+}
+
+mkchroot(){
+
+CHECK_PROC="$(mount | grep -w "${MNTDIR}/proc" | wc -l)"
+if [ "${CHECK_PROC}" = "0" ]; then
+	mount -vo bind /proc ${MNTDIR}/proc
+fi
+
+CHECK_DEV="$(mount | grep -w "${MNTDIR}/dev" | wc -l)"
+if [ "${CHECK_DEV}" = "0" ]; then
+	mount -vo bind /dev ${MNTDIR}/dev
+fi
+
+	CHECK_SYS="$(mount | grep -w "${MNTDIR}/sys" | wc -l)"
+if [ "${CHECK_SYS}" = "0" ]; then
+	mount -vo bind /sys ${MNTDIR}/sys
+fi
+
+
+if [ "${MNTDIR}/bin/bashlogin" -e]; then
+	chroot ${MNTDIR} /bin/bashlogin
+else
+	chroot ${MNTDIR} /bin/bash
+fi
+
+}
+
+umountchroot(){
+umount -v ${MNTDIR}/proc ${MNTDIR}/dev ${MNTDIR}/sys
+}
+
+mkiso(){
+
+# clean
+echo -e "\nCleaning Temporary files...\n"
+
+rm -rf ${MNTDIR}/usr/portage/distfiles/*
+rm -rf ${MNTDIR}/var/tmp/portage/*
+rm -rf ${MNTDIR}/root/nohup.* ${MNTDIR}/root/.bash_history ${MNTDIR}/root/.viminfo
+rm -rf ${MNTDIR}/var/log/messages ${MNTDIR}/var/log/wtmp ${MNTDIR}/var/log/Xorg.0.log* ${MNTDIR}/var/log/dmesg ${MNTDIR}/var/log/rc.log
+rm -rf ${MNTDIR}/etc/ssh/*key*
+mkdir -p ${MNTDIR}/root/.ssh
+cp /mnt/custom/customcd/rescuecd-area31/.bash_history ${MNTDIR}/root/.bash_history
+
+# umount
+echo -e "\nUmounting chroot....\n"
+umount ${MNTDIR}/proc ${MNTDIR}/dev ${MNTDIR}/sys
+
+sleep 1
+
+echo -e "\nCreating the new squashfs image...\n"
+
+sh /usr/sbin/sysresccd-custom squashfs
+
+echo -e "\nCreating the new ISO image...\n"
+sh /usr/sbin/sysresccd-custom isogen rescuecd-area31
+
+sleep 1
+
+sync
+
+echo -e "\nFinished.\n"
+}
+
+
+case "$1" in
+    mount-disk)
+		mountdisk
+        ;;
+    umount-disk)
+		umountdisk
+        ;;
+    make-chroot)
+		mkchroot
+        ;;
+	umount-chroot)
+		umountchroot
+		;;
+    make-iso)
+		mkiso
+        ;;
+    version)
+        echo "beta"
+        exit $?
+        ;;
+    *)
+        echo "Script to gen ISO."
+        echo ""
+        echo "Usage: $0 {mount-disk|make-chroot|make-iso|version|umount-disk|umount-chroot}"
+        exit 0
+        ;;
+esac

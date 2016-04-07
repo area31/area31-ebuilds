@@ -1,0 +1,34 @@
+#!/bin/bash
+DIR_SYSTEM="/mnt/yaxkin"
+DIR_SETUP="/mnt/setup"
+TMP="${DIR_SETUP}/tmp"
+
+if [ ! -d $TMP ]; then
+  mkdir -p $TMP
+fi
+
+T_PX="$DIR_SYSTEM"
+while [ "`cat $T_PX/etc/shadow | egrep -i 'root:' | cut -f 2 -d :`" = "*" ]; do
+  # There is no root password
+  dialog --title " ATENÇÃO: NENHUMA SENHA DE ROOT FOI DEFINIDA " --yesno "\nNão foi \
+definida nenhuma senha para o administrador do sistema (root). \
+É recomendável que você defina uma agora para que o usuário ROOT esteja ativo na primeira \
+vez que a máquina for iniciada. Isto é especialmente importante se você está \
+usando um kernel de rede habilitado e a máquina está na Internet ou \
+conectada via LAN.\n\nGostaria de definir uma senha de root? " 14 68
+  if [ $? = 0 ] ; then
+    echo
+    echo
+    echo
+    chroot $T_PX /usr/bin/passwd root
+    echo
+    echo -n "Pressione [enter] para continuar:"
+    read junk;
+    echo
+    # Here we drop through, and if there's still no password the menu
+    # runs again.
+  else
+    # Don't set a password:
+    break;
+  fi
+done

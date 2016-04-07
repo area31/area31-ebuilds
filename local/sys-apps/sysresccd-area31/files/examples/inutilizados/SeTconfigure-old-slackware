@@ -1,0 +1,47 @@
+# CONFIGURE
+
+ if [ "$MAINSELECT" = "CONFIGURE" ]; then
+#  SeTconfig
+  REPLACE_FSTAB=Y
+ # if [ -r $TMP/SeTnative ]; then
+
+
+  var=0
+  touch $TMP/SeTnative
+  var=$(wc -l $TMP/SeTnative|cut -d" " -f1)
+  if [ "$var" -ge 1 ];then
+
+
+
+
+   if [ -r $T_PX/etc/fstab ]; then
+    dialog --title "REPLACE /etc/fstab?" --yesno "You already have an \
+/etc/fstab on your install partition.  If you were just adding software, \
+you should probably keep your old /etc/fstab.  If you've changed your \
+partitioning scheme, you should use the new /etc/fstab.  Do you want \
+to replace your old /etc/fstab with the new one?" 10 58
+    if [ ! $? = 0 ]; then
+     REPLACE_FSTAB=N
+    fi
+   fi
+   if [ "$REPLACE_FSTAB" = "Y" ]; then
+    cat /dev/null > $T_PX/etc/fstab
+    if [ -r $TMP/SeTswap ]; then
+     cat $TMP/SeTswap > $T_PX/etc/fstab
+    fi
+    cat $TMP/SeTnative >> $T_PX/etc/fstab
+    if [ -r $TMP/SeTDOS ]; then
+     cat $TMP/SeTDOS >> $T_PX/etc/fstab
+    fi
+    printf "%-16s %-16s %-11s %-16s %-3s %s\n" "#/dev/cdrom" "/mnt/cdrom" "auto" "noauto,owner,ro" "0" "0" >> $T_PX/etc/fstab
+    printf "%-16s %-16s %-11s %-16s %-3s %s\n" "/dev/fd0" "/mnt/floppy" "auto" "noauto,owner" "0" "0" >> $T_PX/etc/fstab
+    printf "%-16s %-16s %-11s %-16s %-3s %s\n" "devpts" "/dev/pts" "devpts" "gid=5,mode=620" "0" "0" >> $T_PX/etc/fstab
+    printf "%-16s %-16s %-11s %-16s %-3s %s\n" "proc" "/proc" "proc" "defaults" "0" "0" >> $T_PX/etc/fstab
+    printf "%-16s %-16s %-11s %-16s %-3s %s\n" "tmpfs" "/dev/shm" "tmpfs" "defaults" "0" "0" >> $T_PX/etc/fstab
+   fi
+   dialog --title "SETUP COMPLETE" --msgbox "System configuration \
+and installation is complete.  You may EXIT setup and reboot your machine with \
+ctrl-alt-delete." 7 55
+  fi
+ fi
+

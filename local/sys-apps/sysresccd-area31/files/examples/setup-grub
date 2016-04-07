@@ -1,0 +1,3 @@
+#!/bin/bash
+grep -v rootfs /proc/mounts|grep -v livecd |grep -v cdrom > /etc/mtab
+grub-install --no-floppy /dev/sda

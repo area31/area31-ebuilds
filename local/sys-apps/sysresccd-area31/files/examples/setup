@@ -1,0 +1,286 @@
+#!/bin/bash
+
+#################################################################################
+# Copyright 2011 Raphael Bastos, Belo Horizonte, Minas Gerais, Brasil
+# All rights reserved.
+#
+# Redistribution and use of this script, with or without modification, is 
+# permitted provided that the following conditions are met:
+#
+# 1. Redistributions of this script must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+#  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+#  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO
+#  EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+#  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+#  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+#  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+#  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR 
+#  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+#  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# Este e um instalador modificado a partir do instalador do SLACKWARE LINUX 1337
+#
+# As always, bug reports, suggestions, etc: raphaelbastos@hackstore.com.br
+#################################################################################
+
+export LANG=pt_BR.UTF-8
+export LC_ALL=pt_BR.UTF-8
+export HISTTIMEFORMAT="%h/%d - %H:%M:%S - "
+
+# Define diretorio temporario do instalador
+TMP="/mnt/setup/tmp"
+if [ ! -d $TMP ]; then
+  mkdir -p $TMP
+fi
+
+# define diretorio da instalação
+INSTALL_DIR="/mnt/yaxkin"
+if [ ! -d $INSTALL_DIR ]; then
+  mkdir -p $INSTALL_DIR
+  fi
+
+# Limpando diretorio tmp
+rm -f $TMP/SeT*
+rm -f $TMP/hdset
+
+
+
+# Se um mapa de teclado foi previamente configurado, restaura os dados:
+	if [ -r $TMP/Pkeymap ]; then
+	  cp $TMP/Pkeymap $TMP/SeTkeymap
+	fi
+
+# Define o diretório de instalação no PATH do sistema
+# turn on color menus
+echo "on" > $TMP/SeTcolor
+PATH="$PATH:/mnt/setup"
+export PATH;
+export COLOR=on
+
+# Antes da checagem, ativa todas as partições LVM [ não use essa bosta ;) ]
+vgchange -ay 1> /dev/null 2> /dev/null
+
+# Checa se existem partições LINUX
+	if fdisk -l 2> /dev/null | egrep -i 'Linux$' 1> /dev/null 2> /dev/null ; then
+	 fdisk -l 2> /dev/null | egrep -i 'Linux$' | sort 1> $TMP/SeTplist 2> /dev/null
+	else
+	dialog --title " NENHUMA PARTIÇÃO LINUX DETECTADA " \
+--msgbox "\n Parece que não existe nenhuma partição Linux nesta máquina.\
+\n\n Você precisará criar pelo menos uma para instalar o Yaxkin Linux\n\
+ Para fazer isso, você precisa escolher a opção 'PARTICIONADOR' no\n\
+ menu principal, e criar as partições usando o 'cfdisk' ou 'fdisk'\n\n\
+ Para mais informações, leia a AJUDA no menu a seguir.\n\n\
+ Lembre-se também de criar uma partição SWAP de pelo menos 2GB" 15 71
+fi
+
+T_PX="/mnt/yaxkin"
+echo "$T_PX" > $TMP/SeTT_PX
+
+ROOT_DEVICE="`mount | egrep -i "on /mnt/yaxkin " | cut -f 1 -d ' '`"
+echo "$ROOT_DEVICE" > $TMP/SeTrootdev
+
+# menu do setup
+while [ 0 ]; do
+	dialog --title " Yaxkin Linux " --menu "Bem vindo ao instalador do Yaxkin Linux.\n\n\
+	Selecione uma opção usando as teclas direcionais UP/DOWN e pressione [SPACE] ou [ENTER].\n\
+	Teclas alternativas também podem ser usadas: '+', '-' e [TAB]." 0 0 0 \
+	"AJUDA" "Obtenha ajuda com o manual do instalador do Yaxkin" \
+	"PARTICIONADOR" "Prepare o HD para instalação do Yaxkin" \
+	"KEYMAP" "Redefina seu mapa de teclado" \
+	"ADDSWAP" "Configure a partição SWAP" \
+	"TARGET" "Configure a partição destino da instalação" \
+	"INSTALAR" "Instale o Yaxkin" \
+	"CONFIGURE" "Configure o Yaxkin instalado" \
+	"HORA" "Defina a hora do sistema" \
+	"FINALIZAR" "Sair do instalador do Yaxkin Linux" 2> $TMP/hdset
+	if [ ! $? = 0 ]; then
+	  exit
+ fi
+ MAINSELECT="`cat $TMP/hdset`"
+ rm $TMP/hdset
+
+# Inicio do script de instalação
+
+################################################################
+# AJUDA
+
+
+ if [ "$MAINSELECT" = "AJUDA" ]; then
+  SeTfdAJUDA
+ fi
+
+
+################################################################
+# PARTICIONADOR
+
+ if [ "$MAINSELECT" = "PARTICIONADOR" ]; then
+      dialog --title " BEM VINDO AO PARTICIONADOR " --msgbox "\n\
+ O instalador do Yaxkin precisa de algumas coisas:\n\n\
+ 1. Crie pelo menos uma partição Linux.\n\
+ 2. Se possível crie uma partição SWAP (RECOMENDADO).\n\n\
+ Pressione [ENTER] para continuar" 12 60
+    SeTparticionador
+ 
+ 
+	 if [ ! -r $TMP/Pkeymap ]; then
+	 MAINSELECT="KEYMAP"
+	 else
+	 MAINSELECT="ADDSWAP"
+	 fi
+
+ fi
+
+################################################################
+# MAPA DE TECLADO
+
+if [ "$MAINSELECT" = "KEYMAP" ]; then
+ dialog --title " Yaxkin Linux " --msgbox "\n Configure o mapa de teclado,\n\
+ Pressione [ENTER] para continuar..." 8 42
+SeTkeymap
+      if [ -r $TMP/Pkeymap ]; then
+      MAINSELECT="ADDSWAP"
+      fi
+fi
+
+################################################################
+
+# SWAP
+
+if [ "$MAINSELECT" = "ADDSWAP" ]; then
+ dialog --title " Yaxkin Linux " --msgbox "\n Configure a SWAP,\n\
+ Pressione [ENTER] para continuar..." 8 42
+
+SeTswap
+	  if [ -r $TMP/SeTswap ]; then
+	  MAINSELECT="TARGET"
+	  elif [ -r $TMP/SeTswapskip ]; then
+	  # Go ahead to TARGET without swap space:
+	  MAINSELECT="TARGET"
+	  fi
+fi
+
+################################################################
+# TARGET
+
+if [ "$MAINSELECT" = "TARGET" ]; then
+ dialog --title " Yaxkin Linux " --msgbox "\n Configure as partições para instalação,\n\
+ Pressione [ENTER] para continuar..." 8 45
+  sleep 3
+SeTtarget
+
+var=0
+touch $TMP/SeTnative
+var=$(wc -l $TMP/SeTnative|cut -d" " -f1)
+
+if [ "$var" -ge 1 ];then 
+   MAINSELECT="INSTALAR"
+fi
+ fi
+
+################################################################
+# INSTALL SCRIPT
+
+ if [ "$MAINSELECT" = "INSTALAR" ]; then
+  
+  if [ ! -r $TMP/Pkeymap -o ! -r $TMP/SeTnative ]; then
+
+     dialog --title " ERRO AO INSTALAR YAXKIN " --msgbox "\n \
+  O instalador do Yaxkin precisa de algumas coisas:\n\n \
+     1. Selecione pelo menos um mapa de teclado.\n \
+     2. Selecione pelo menos uma partição Linux previamente criada.\n \
+     3. Se possivel crie e ative uma partição SWAP (RECOMENDADO).\n
+     \n
+     É possível redefinir o mapa de teclado.\n\n
+     Pressione [ENTER] para retornar ao menu principal." 14 78
+     continue
+       fi
+
+# Define versão da instalação
+echo "server" > $TMP/SeTversion
+
+# inicio da instalação
+dialog --yesno "\n Deseja iniciar o processo de instalação?\n" 7 46 && setup-install
+
+# Se a instalação prosseguir sem problemas, será ajustada a hora do sistema
+if [ -f $TMP/grub.conf ]; then
+
+dialog --title " Yaxkin Linux " --msgbox "\n\
+ Pressione [ENTER] para ajustar a hora do sistema.\n" 7 57
+
+MAINSELECT="HORA"
+fi
+fi
+
+#######################################################3
+# CONFIGURE
+
+ if [ "$MAINSELECT" = "CONFIGURE" ]; then
+var=0
+var=$(wc -l ${INSTALL_DIR}/etc/issue.yaxkin|cut -d" " -f1)
+
+if [ "$var" -ne 0 ];then
+SeTconfigure
+else
+   dialog --title " ERRO AO CONFIGURAR YAXKIN " --msgbox "\n\
+O Yaxkin Configure Tools precisa de algumas coisas:\n\n\
+ 1. Selecione pelo menos uma partição com Yaxkin Linux\n\
+    instalado usando a opção "TARGET" no menu principal\n\n\
+ 2. Se possivel crie e ative uma partição SWAP (RECOMENDADO)\n
+\n
+É possível redefinir o mapa de teclado\n\n
+Pressione [ENTER] para retornar ao menu principal" 16 66
+continue
+ fi
+fi
+#######################################################
+# configura hora do Yaxkin
+
+ if [ "$MAINSELECT" = "HORA" ]; then
+	fixdate
+
+if [ -f $TMP/grub.conf ]; then
+
+dialog --title " YAXKIN INSTALADO COM SUCESSO " --msgbox "\n \
+ O Yaxkin foi instalado com sucesso! \n\n \
+ Pressione [ENTER] para desmontar todas as unidades\n" 9 60
+
+	MAINSELECT="FINALIZAR"
+fi
+
+fi
+
+#######################################################
+# finaliza instalação e desmonta tudo
+
+if [ "$MAINSELECT" = "FINALIZAR" ]; then
+DIR_SYSTEM="/mnt/yaxkin"
+YAXKIN_MOUNTED=$( mount |grep -i yaxkin|wc -l  )
+
+# Desmontando todos os discos montados
+	if [ "$YAXKIN_MOUNTED" -ne 0 ];then
+		SeTpasswd
+		setup-umount
+		swapoff -a
+		break
+		else
+		break
+	fi
+fi
+done # fim do while loop
+
+sync
+
+#######################################################
+# Exibindo mensagem de saída
+
+if [ -f $TMP/grub.conf ]; then
+  dialog --title " Yaxkin Linux " --msgbox "\nYaxkin Linux instalado com sucesso\n" 7 50
+  echo -e '\nReinicie o sistema...\nDigite 'reboot' e pressione enter.\n\nObrigado por utilizar o Yaxkin Linux!\n'
+
+fi
+
+#######################################################
+# end yaxkin setup script

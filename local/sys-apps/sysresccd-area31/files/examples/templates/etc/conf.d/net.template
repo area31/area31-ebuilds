@@ -1,0 +1,3 @@
+config_{IFACE}="{IP} netmask {NETMASK} brd {BRD}"
+routes_{IFACE}="default via {ROUTER}"
+dns_servers_{IFACE}="{DNS}"

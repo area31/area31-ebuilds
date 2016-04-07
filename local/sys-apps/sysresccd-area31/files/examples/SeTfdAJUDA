@@ -1,0 +1,2 @@
+#!/bin/sh
+dialog --title "Yaxkin Setup Help" --exit-label OK --textbox "/mnt/setup/FDhelp.yaxkin" 32 97

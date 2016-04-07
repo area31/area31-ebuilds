@@ -1,0 +1,52 @@
+--- setup.py
++++ setup.py
+@@ -1141,16 +1141,11 @@
+ 
+         # The standard Unix dbm module:
+         if platform not in ['cygwin']:
+-            if find_file("ndbm.h", inc_dirs, []) is not None:
+-                # Some systems have -lndbm, others don't
+-                if self.compiler.find_library_file(lib_dirs, 'ndbm'):
+-                    ndbm_libs = ['ndbm']
+-                else:
+-                    ndbm_libs = []
+-                exts.append( Extension('dbm', ['dbmmodule.c'],
+-                                       define_macros=[('HAVE_NDBM_H',None)],
+-                                       libraries = ndbm_libs ) )
+-            elif self.compiler.find_library_file(lib_dirs, 'gdbm'):
++            # To prevent automagic dependencies check for relevant modules in
++            # disabled_module_list.
++            if (self.compiler.find_library_file(lib_dirs, 'gdbm')
++                    and find_file("gdbm/ndbm.h", inc_dirs, []) is not None
++                    and 'gdbm' not in disabled_module_list):
+                 gdbm_libs = ['gdbm']
+                 if self.compiler.find_library_file(lib_dirs, 'gdbm_compat'):
+                     gdbm_libs.append('gdbm_compat')
+@@ -1166,7 +1161,7 @@
+                         libraries = gdbm_libs ) )
+                 else:
+                     missing.append('dbm')
+-            elif db_incs is not None:
++            elif db_incs is not None and 'bsddb' not in disabled_module_list:
+                 exts.append( Extension('dbm', ['dbmmodule.c'],
+                                        library_dirs=dblib_dir,
+                                        runtime_library_dirs=dblib_dir,
+@@ -1174,6 +1169,18 @@
+                                        define_macros=[('HAVE_BERKDB_H',None),
+                                                       ('DB_DBM_HSEARCH',None)],
+                                        libraries=dblibs))
++            # Check for ndbm.h here after checking berkdb because ndbm.h is
++            # only provided by db-1*
++            elif (find_file("ndbm.h", inc_dirs, []) is not None
++                     and 'bsddb' not in disabled_module_list):
++                # Some systems have -lndbm, others don't
++                if self.compiler.find_library_file(lib_dirs, 'ndbm'):
++                    ndbm_libs = ['ndbm']
++                else:
++                    ndbm_libs = []
++                exts.append( Extension('dbm', ['dbmmodule.c'],
++                                        define_macros=[('HAVE_NDBM_H',None)],
++                                        libraries = ndbm_libs ) )
+             else:
+                 missing.append('dbm')
+ 

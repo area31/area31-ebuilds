@@ -1,0 +1,56 @@
+#!/bin/bash
+
+TMP=/mnt/setup/tmp
+if [ ! -d $TMP ]; then
+  mkdir -p $TMP
+fi
+rm -rf $TMP/SeTdevices
+
+# desmontando tudo q estiver montado
+swapoff -a
+/mnt/setup/setup-umount
+sync
+
+fdisk -l 2> /dev/null | egrep -i 'Linux$' | sort 1> $TMP/SeTplist 2> /dev/null
+
+#LISTA=ls -lG /dev/disk/by-uuid/|grep root |cut -d'/' -f3
+ls -1 /sys/block/|grep sd[a-z] > $TMP/SeTdevices
+ARQUIVO="$TMP/SeTdevices"
+
+dialog --backtitle "Yaxkin Partition Tools" \
+ --title " SELECIONE UM DISPOSITIVO " \
+ --menu 'Selecione o dispositivo desejado para ser particionado:' \
+10 35 6 $(cat $ARQUIVO | cut -d: -f1 | sed s,$," # ",) 2> $TMP/selectHD
+
+if [ ! $? = 0 ]; then
+ rm $TMP/selectHD
+ exit
+fi
+
+
+DEVICE=$( cat $TMP/selectHD )
+rm $TMP/selectHD
+
+dialog --backtitle "Yaxkin Partition Tools" \
+--title " SELECIONE UMA FERRAMENTA DE PARTICIONAMENTO " --menu \
+"Por favor escolha uma ferramenta abaixo para prosseguir com o particionamento manual:\n" \
+11 70 9 \
+"CFDISK" "Configure o dispositivo \"${DEVICE}\" usando o 'cfdisk' " \
+"FDISK" "Configure o dispositivo \"${DEVICE}\" usando o 'fdisk'" \
+2> $TMP/select
+if [ ! $? = 0 ]; then
+ rm $TMP/select
+ exit
+fi
+
+SELECT_CONFIGURE="`cat $TMP/select`"
+rm -f $TMP/select
+if [ "${SELECT_CONFIGURE}" = "CFDISK" ]; then
+
+cfdisk /dev/$DEVICE
+
+elif [ "${SELECT_CONFIGURE}" = "FDISK" ]; then
+
+fdisk /dev/$DEVICE
+
+fi

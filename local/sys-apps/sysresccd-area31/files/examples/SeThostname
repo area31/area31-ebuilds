@@ -1,0 +1,30 @@
+#!/bin/bash
+SETUP_DIR="/mnt/setup"
+TMP_INSTALL="${SETUP_DIR}/tmp"
+DIRLOG="${SETUP_DIR}/log"
+DIR_SYSTEM="/mnt/yaxkin"
+CHROOT_YAXKIN="chroot /mnt/yaxkin"
+
+# configurando hostname
+HOSTNAME_YAXKIN=""
+
+while [ -z "$HOSTNAME_YAXKIN" ]; do
+# configurando hostname
+        HOSTNAME_YAXKIN=$( dialog --stdout --title ' Yaxkin Network Setup ' --inputbox "Digite o hostname:\n\n" 8 40 )
+        if [ -z "$HOSTNAME_YAXKIN" ]; then
+                dialog --title " Erro ao configurar hostname " --msgbox "\nDigite um hostname válido.\n" 7 50
+        fi
+done
+	  
+cp ${SETUP_DIR}/templates/etc/conf.d/hostname.template ${TMP_INSTALL}/hostname
+
+# definindo hostname
+sed -i s,{HOSTNAME},"${HOSTNAME_YAXKIN}",g ${TMP_INSTALL}/hostname
+
+# copiando conf hostname para o diretorio do yaxkin
+cp ${TMP_INSTALL}/hostname ${DIR_SYSTEM}/etc/conf.d/hostname
+
+# definindo configuração do arquivo /etc/hosts
+echo "127.0.0.1       ${HOSTNAME_YAXKIN}.local ${HOSTNAME_YAXKIN} localhost" > ${DIR_SYSTEM}/etc/hosts
+echo "::1             localhost" >> ${DIR_SYSTEM}/etc/hosts
+${CHROOT_YAXKIN} /bin/hostname ${HOSTNAME_YAXKIN}

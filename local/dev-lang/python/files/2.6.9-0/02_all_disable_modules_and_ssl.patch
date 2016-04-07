@@ -1,0 +1,92 @@
+--- setup.py
++++ setup.py
+@@ -18,7 +18,18 @@
+ from distutils.spawn import find_executable
+ 
+ # This global variable is used to hold the list of modules to be disabled.
+-disabled_module_list = []
++pdm_env = "PYTHON_DISABLE_MODULES"
++if pdm_env in os.environ:
++    disabled_module_list = os.environ[pdm_env].split()
++else:
++    disabled_module_list = []
++
++pds_env = "PYTHON_DISABLE_SSL"
++if pds_env in os.environ:
++    disable_ssl = os.environ[pds_env]
++else:
++    disable_ssl = 0
++ 
+ 
+ def add_dir_to_list(dirlist, dir):
+     """Add the directory 'dir' to the list 'dirlist' (at the front) if
+@@ -355,6 +366,7 @@
+         return sys.platform
+ 
+     def detect_modules(self):
++        global disable_ssl
+         # Ensure that /usr/local is always used
+         add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
+         add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
+@@ -697,7 +709,7 @@
+         ssl_incs = find_file('openssl/ssl.h', inc_dirs,
+                              search_for_ssl_incs_in
+                              )
+-        if ssl_incs is not None:
++        if ssl_incs is not None and not disable_ssl:
+             krb5_h = find_file('krb5.h', inc_dirs,
+                                ['/usr/kerberos/include'])
+             if krb5_h:
+@@ -708,7 +720,8 @@
+                                      ] )
+ 
+         if (ssl_incs is not None and
+-            ssl_libs is not None):
++            ssl_libs is not None and
++            not disable_ssl):
+             exts.append( Extension('_ssl', ['_ssl.c'],
+                                    include_dirs = ssl_incs,
+                                    library_dirs = ssl_libs,
+@@ -742,6 +755,7 @@
+ 
+         if (ssl_incs is not None and
+             ssl_libs is not None and
++            not disable_ssl and
+             openssl_ver >= 0x00907000):
+             # The _hashlib module wraps optimized implementations
+             # of hash functions from the OpenSSL library.
+@@ -752,20 +766,22 @@
+             # these aren't strictly missing since they are unneeded.
+             #missing.extend(['_sha', '_md5'])
+         else:
+-            # The _sha module implements the SHA1 hash algorithm.
+-            exts.append( Extension('_sha', ['shamodule.c']) )
+-            # The _md5 module implements the RSA Data Security, Inc. MD5
+-            # Message-Digest Algorithm, described in RFC 1321.  The
+-            # necessary files md5.c and md5.h are included here.
+-            exts.append( Extension('_md5',
+-                            sources = ['md5module.c', 'md5.c'],
+-                            depends = ['md5.h']) )
+             missing.append('_hashlib')
+ 
+-        if (openssl_ver < 0x00908000):
+-            # OpenSSL doesn't do these until 0.9.8 so we'll bring our own hash
+-            exts.append( Extension('_sha256', ['sha256module.c']) )
+-            exts.append( Extension('_sha512', ['sha512module.c']) )
++        ### Build these unconditionally so emerge won't fail
++        ### when openssl is dropped/broken etc.
++        # The _sha module implements the SHA1 hash algorithm.
++        exts.append( Extension('_sha', ['shamodule.c']) )
++        # The _md5 module implements the RSA Data Security, Inc. MD5
++        # Message-Digest Algorithm, described in RFC 1321.  The
++        # necessary files md5.c and md5.h are included here.
++        exts.append( Extension('_md5',
++                        sources = ['md5module.c', 'md5.c'],
++                        depends = ['md5.h']) )
++
++        exts.append( Extension('_sha256', ['sha256module.c']) )
++        exts.append( Extension('_sha512', ['sha512module.c']) )
++        ###
+ 
+         # Modules that provide persistent dictionary-like semantics.  You will
+         # probably want to arrange for at least one of them to be available on

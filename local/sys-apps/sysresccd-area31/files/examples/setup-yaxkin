@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ ! -d /mnt/setup ]; then
+cp -r /mnt/livecd/yaxkin/setup /mnt
+  fi
+sleep 1
+bash /mnt/setup/setup
