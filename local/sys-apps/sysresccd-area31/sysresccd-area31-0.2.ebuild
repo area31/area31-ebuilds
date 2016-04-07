@@ -13,6 +13,7 @@ IUSE=""
 DEPEND=">=dev-lang/python-2.4.0
 		dev-util/dialog
 		dev-libs/libisoburn
+		sys-fs/squashfs-tools
         >=app-shells/bash-3.1"
 RDEPEND="${DEPEND}"
 
