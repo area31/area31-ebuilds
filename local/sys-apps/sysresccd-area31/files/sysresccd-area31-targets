@@ -50,11 +50,10 @@ echo -e "\nCleaning Temporary files...\n"
 
 rm -rf ${MNTDIR}/usr/portage/distfiles/*
 rm -rf ${MNTDIR}/var/tmp/portage/*
-rm -rf ${MNTDIR}/root/nohup.* ${MNTDIR}/root/.bash_history ${MNTDIR}/root/.viminfo
+rm -rf ${MNTDIR}/root/nohup.* ${MNTDIR}/root/.bash_history ${MNTDIR}/root/.viminfo ${MNTDIR}/root/.bash_history
 rm -rf ${MNTDIR}/var/log/messages ${MNTDIR}/var/log/wtmp ${MNTDIR}/var/log/Xorg.0.log* ${MNTDIR}/var/log/dmesg ${MNTDIR}/var/log/rc.log
 rm -rf ${MNTDIR}/etc/ssh/*key*
 mkdir -p ${MNTDIR}/root/.ssh
-cp /mnt/custom/customcd/rescuecd-area31/.bash_history ${MNTDIR}/root/.bash_history
 
 # umount
 echo -e "\nUmounting chroot....\n"
@@ -64,7 +63,8 @@ sleep 1
 
 echo -e "\nCreating the new squashfs image...\n"
 
-sh /usr/sbin/sysresccd-custom squashfs
+#sh /usr/sbin/sysresccd-custom squashfs
+echo created
 
 echo -e "\nCreating the new ISO image...\n"
 sh /usr/sbin/sysresccd-custom isogen rescuecd-area31
