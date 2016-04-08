@@ -42,5 +42,7 @@ src_install()
 	doins "${FILESDIR}"/load-fonts-keymaps
 	doins "${FILESDIR}"/sysresccd
 	doins "${FILESDIR}"/netconfig2
+	insinto /usr/share/backgrounds/xfce
+	doins "${FILESDIR}"/bg-blur-area31.jpg
 	dosbin "${FILESDIR}"/sysresccd-area31 || die
 }
