@@ -63,7 +63,7 @@ sleep 1
 
 echo -e "\nCreating the new squashfs image...\n"
 
-#sh /usr/sbin/sysresccd-custom squashfs
+sh /usr/sbin/sysresccd-custom squashfs
 echo created
 
 echo -e "\nCreating the new ISO image...\n"
