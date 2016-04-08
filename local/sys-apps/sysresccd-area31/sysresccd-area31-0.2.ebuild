@@ -35,5 +35,7 @@ src_install()
 	doins "${FILESDIR}"/sysresccd-area31-fixdate
 	doins "${FILESDIR}"/sysresccd-area31-showmount
 	doins "${FILESDIR}"/examples.tar
+	insinto /etc/init.d
+	doins "${FILESDIR}"/autorun
 	dosbin "${FILESDIR}"/sysresccd-area31 || die
 }
