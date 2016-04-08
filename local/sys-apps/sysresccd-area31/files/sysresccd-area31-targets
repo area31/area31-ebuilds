@@ -54,6 +54,8 @@ rm -rf ${MNTDIR}/root/nohup.* ${MNTDIR}/root/.bash_history ${MNTDIR}/root/.vimin
 rm -rf ${MNTDIR}/var/log/messages ${MNTDIR}/var/log/wtmp ${MNTDIR}/var/log/Xorg.0.log* ${MNTDIR}/var/log/dmesg ${MNTDIR}/var/log/rc.log
 rm -rf ${MNTDIR}/etc/ssh/*key*
 mkdir -p ${MNTDIR}/root/.ssh
+rm -rf ${MNTDIR}/etc/skel
+cp -rp ${MNTDIR}/root ${MNTDIR}/etc/skel
 
 # umount
 echo -e "\nUmounting chroot....\n"
