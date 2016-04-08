@@ -37,11 +37,11 @@ src_install()
 	doins "${FILESDIR}"/sysresccd-area31-showmount
 	doins "${FILESDIR}"/examples.tar
 	insinto /etc/init.d
-	doins "${FILESDIR}"/autorun
-	doins "${FILESDIR}"/dostartx
-	doins "${FILESDIR}"/load-fonts-keymaps
-	doins "${FILESDIR}"/sysresccd
-	doins "${FILESDIR}"/netconfig2
+	newinitd "${FILESDIR}"/autorun autorun
+	newinitd "${FILESDIR}"/dostartx dostartx
+	newinitd "${FILESDIR}"/load-fonts-keymaps load-fonts-keymaps
+	newinitd "${FILESDIR}"/sysresccd sysreccd
+	newinitd "${FILESDIR}"/netconfig2 netconfig2
 	insinto /usr/share/backgrounds/xfce
 	doins "${FILESDIR}"/bg-blur-area31.jpg
 	dosbin "${FILESDIR}"/sysresccd-area31 || die
