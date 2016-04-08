@@ -38,5 +38,6 @@ src_install()
 	insinto /etc/init.d
 	doins "${FILESDIR}"/autorun
 	doins "${FILESDIR}"/dostartx
+	doins "${FILESDIR}"/load-fonts-keymaps
 	dosbin "${FILESDIR}"/sysresccd-area31 || die
 }
