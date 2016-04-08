@@ -37,5 +37,6 @@ src_install()
 	doins "${FILESDIR}"/examples.tar
 	insinto /etc/init.d
 	doins "${FILESDIR}"/autorun
+	doins "${FILESDIR}"/dostart
 	dosbin "${FILESDIR}"/sysresccd-area31 || die
 }
