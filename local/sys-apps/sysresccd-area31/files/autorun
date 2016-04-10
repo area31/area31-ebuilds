@@ -2,7 +2,7 @@
 
 depend()
 {
-	after sysresccd tigervnc mdadm
+	after sysresccd mdadm
 }
 
 start()
