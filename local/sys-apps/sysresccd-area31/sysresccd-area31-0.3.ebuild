@@ -15,6 +15,8 @@ DEPEND=">=dev-lang/python-2.4.0
 		dev-libs/libisoburn
 		sys-fs/squashfs-tools
 		sys-apps/hwsetup
+		sys-apps/sysresccd-scripts
+		sys-apps/sysresccd-custom
         >=app-shells/bash-3.1"
 RDEPEND="${DEPEND}"
 
