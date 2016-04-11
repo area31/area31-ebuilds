@@ -8,8 +8,7 @@ TMP="/tmp/sysresccd-area31"
 
 TMP=/mnt/setup/tmp
 NDIR=/dev/null
-REDIR=/dev/tty4
-T_PX=/
+REDIR=/dev/null
 mkdir -p $TMP
 
 rm -rf $TMP/SeTdevices
@@ -31,190 +30,182 @@ fdisk -l 2> /dev/null | egrep -i 'Linux$' | sort 1> $TMP/SeTplist 2> /dev/null
 
 # crunch() -  remove extra whitespace
 crunch () {
-   read STRING;
-   echo $STRING
+	read STRING;
+	echo $STRING
 }
 
 # make_btrfs - Create a new btrfs filesystem on the named dev.
 make_btrfs() {
-   # get the size of the named partition
-   SIZE=`get_part_size $1`
-   SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
-   # output a nice status message
-   dialog --title " FORMATANDO " \
+	# get the size of the named partition
+	SIZE=`get_part_size $1`
+	SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
+	# output a nice status message
+	dialog --title " FORMATANDO " \
    --backtitle "Formatando $1 com sistema de arquivos btrfs." \
    --infobox "Formatando $1  \n\
 Tamanho dos blocos em MB: $SIZE_MB \n\
 Sistema de arquivos: btrfs " 0 0
-   # do the format
-   if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
-      umount $1 2> $NDIR
-   fi
-   mkfs.btrfs $1 1> $REDIR 2> $REDIR
+	# do the format
+	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
+		umount $1
+	fi
+	mkfs.btrfs -f $1
 }
 
-# make_reiser4( dev, check ) - Create a new reiser4 filesystem on the named
-#                                device.
-#              check   Perform fs check (y or n)
+# make_reiser4 - Create a new reiser4 filesystem on the named device
 make_reiser4() {
-   # get the size of the named partition
-   SIZE=`get_part_size $1`
-   SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
-   # output a nice status message
-   dialog --title " FORMATANDO " \
+	# get the size of the named partition
+	SIZE=`get_part_size $1`
+	SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
+	# output a nice status message
+	dialog --title " FORMATANDO " \
    --backtitle "Formatando $1 com sistema de arquivos reiser4." \
    --infobox "Formatando $1  \n\
 Tamanho dos blocos em MB: $SIZE_MB \n\
 Sistema de arquivos: reiser4" 0 0
-   # do the format
-   if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
-      umount $1 2> $NDIR
-   fi
-   if [ "$2" = "y" ]; then
-      mkf.reiser4 -c $1 1> $REDIR 2> $REDIR
-   else
-      mkfs.reiser4 $1 1> $REDIR 2> $REDIR
-   fi
+	# do the format
+	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
+		umount $1 2> $NDIR
+	fi
+	if [ "$2" = "y" ]; then
+		mkf.reiser4 -c $1
+	else
+		mkfs.reiser4 $1
+	fi
 }
 
-# make_ext3( dev, check ) - Create a new ext3 filesystem on the named
-#                                device.
-#              check   Perform fs check (y or n)
+# make_ext3 - Create a new ext3 filesystem on the named device
 make_ext3() {
-   # get the size of the named partition
-   SIZE=`get_part_size $1`
-   SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
-   # output a nice status message
-   dialog --title " FORMATANDO " \
+	# get the size of the named partition
+	SIZE=`get_part_size $1`
+	SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
+	# output a nice status message
+	dialog --title " FORMATANDO " \
    --backtitle "Formatando $1 com sistema de arquivos ext3." \
    --infobox "Formatando $1  \n\
 Tamanho dos blocos em MB: $SIZE_MB \n\
 Sistema de arquivos: ext3" 0 0
-   # do the format
-   if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
-      umount $1 2> $NDIR
-   fi
-   if [ "$2" = "y" ]; then
-      mkfs.ext3 -c $1 1> $REDIR 2> $REDIR
-   else
-      mkfs.ext3 $1 1> $REDIR 2> $REDIR
-   fi
+	# do the format
+	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
+		umount $1
+	fi
+	if [ "$2" = "y" ]; then
+		mkfs.ext3 -c $1
+	else
+		mkfs.ext3 $1
+	fi
 }
 
-# make_ext4( dev, check ) - Create a new ext4 filesystem on the named
-#                                device.
-#              check   Perform fs check (y or n)
+# make_ext4 - Create a new ext4 filesystem on the named device
 make_ext4() {
-   # get the size of the named partition
-   SIZE=`get_part_size $1`
-   SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
-   # output a nice status message
-   dialog --title " FORMATANDO " \
+	# get the size of the named partition
+	SIZE=`get_part_size $1`
+	SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
+	# output a nice status message
+	dialog --title " FORMATANDO " \
    --backtitle "Formatando $1 com sistema de arquivos ext4." \
    --infobox "Formatando $1  \n\
 Tamanho dos blocos em MB: $SIZE_MB \n\
 Sistema de arquivos: ext4" 0 0
-   # do the format
-   if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
-      umount $1 2> $NDIR
-   fi
-   if [ "$2" = "y" ]; then
-      mkfs.ext4 -c $1 1> $REDIR 2> $REDIR
-   else
-      mkfs.ext4 $1 1> $REDIR 2> $REDIR
-   fi
+	# do the format
+	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
+		umount $1 2> $NDIR
+	fi
+	if [ "$2" = "y" ]; then
+		mkfs.ext4 -F -c $1
+	else
+		mkfs.ext4 -F $1
+	fi
 }
 
-# make_jfs( dev, check ) - Create a new jfs filesystem on the named
-#                                device.
-#              check   Perform fs check (y or n)
+# make_jfs - Create a new jfs filesystem on the named device
 make_jfs() {
-   # get the size of the named partition
-   SIZE=`get_part_size $1`
-   SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
-   # output a nice status message
-   dialog --title " FORMATANDO " \
+	# get the size of the named partition
+	SIZE=`get_part_size $1`
+	SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
+	# output a nice status message
+	dialog --title " FORMATANDO " \
    --backtitle "Formatando $1 com sistema de arquivos jfs." \
    --infobox "Formatando $1  \n\
 Tamanho dos blocos em MB: $SIZE_MB \n\
 Sistema de arquivos: jfs" 0 0
-   # do the format
-   if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
-      umount $1 2> $NDIR
-   fi
-   if [ "$2" = "y" ]; then
-      mkfs.jfs -c -q $1 1> $REDIR 2> $REDIR
-   else
-      mkfs.jfs -q $1 1> $REDIR 2> $REDIR
-   fi
+	# do the format
+	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
+		umount $1 2> $NDIR
+	fi
+	if [ "$2" = "y" ]; then
+		mkfs.jfs -c -q $1
+	else
+		mkfs.jfs -q $1
+	fi
 }
 
 # make_reiserfs - Create a new reiserfs filesystem on the named dev.
 make_reiserfs() {
-   # get the size of the named partition
-   SIZE=`get_part_size $1`
-   SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
-   # output a nice status message
-   dialog --title " FORMATANDO " \
+	# get the size of the named partition
+	SIZE=`get_part_size $1`
+	SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
+	# output a nice status message
+	dialog --title " FORMATANDO " \
    --backtitle "Formatando $1 com sistema de arquivos reiserfs." \
    --infobox "Formatando $1  \n\
 Tamanho dos blocos em MB: $SIZE_MB \n\
 Sistema de arquivos: reiserfs " 0 0
-   # do the format
-   if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
-      umount $1 2> $NDIR
-   fi
-   echo "y" | mkreiserfs $1 1> $REDIR 2> $REDIR
+	# do the format
+	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
+		umount $1 2> $NDIR
+	fi
+	echo "y" | mkreiserfs $1
 }
 
 # make_xfs - Create a new xfs filesystem on the named dev
 make_xfs() {
-   # get the size of the named partition
-   SIZE=`get_part_size $1`
-   SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
-   # output a nice status message
-   dialog --title " FORMATANDO " \
+	# get the size of the named partition
+	SIZE=`get_part_size $1`
+	SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
+	# output a nice status message
+	dialog --title " FORMATANDO " \
    --backtitle "Formatando $1 com sistema de arquivos xfs." \
    --infobox "Formatando $1  \n\
 Tamanho dos blocos em MB: $SIZE_MB \n\
 Sistema de arquivos: xfs " 0 0
-   # do the format
-   if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
-      umount $1 2> $NDIR
-   fi
-   mkfs.xfs -f $1 1> $REDIR 2> $REDIR
+	# do the format
+	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
+		umount $1
+	fi
+	mkfs.xfs -f $1
 }
 
 # gen_part_list() - Prints out a partition listing for the system into the
 gen_part_list() {
-   export COUNT=0
-   cat $TMP/SeTplist | while [ 0 ]; do
-      read PARTITION;
-      if [ "$PARTITION" = "" ]; then
-         break;
-      fi
-      # Variables, variables, variables
-      NAME=`echo $PARTITION | crunch | cut -f 1 -d ' '`
-      SIZE=`echo "$PARTITION" | tr -d "*" | tr -d "+" | crunch | cut -f 4 -d ' '`
-      SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
-      ALTNAME=""
-      DEVICE=`echo "$PARTITION" | tr -d "*" | crunch | cut -f 1 -d ' '`
-
-      # Veja se essa partição já está em uso:
-      if egrep -i "$DEVICE " $TMP/SeTnative 1> $NDIR; then # it's been used
-         ON=`egrep -i "$DEVICE " $TMP/SeTnative | crunch | cut -f 2 -d ' '`
-         ALTNAME="$DEVICE on $ON Linux ${SIZE_MB} MB"
-      fi
-      # Add a menu item
-      if [ "$ALTNAME" = "" ]; then
-         echo "\"$NAME\" \"Linux ${SIZE_MB} MB\" \\" >> $TMP/tempscript
-         echo "false" > $TMP/SeTSKIP # this flag is used for non-root parts
-      else
-         echo "\"(DISPOSITIVO MONTADO)\" \"$ALTNAME\" \\" >> $TMP/tempscript
-      fi
-   done
-   echo "\"---\" \"(Fim da lista de partições compatíveis.)\" \\" >> $TMP/tempscript
-   echo "2> $TMP/return" >> $TMP/tempscript
+	export COUNT=0
+	cat $TMP/SeTplist | while [ 0 ]; do
+		read PARTITION;
+		if [ "$PARTITION" = "" ]; then
+			break;
+		fi
+		# Variables, variables, variables
+		NAME=`echo $PARTITION | crunch | cut -f 1 -d ' '`
+		SIZE=`echo "$PARTITION" | tr -d "*" | tr -d "+" | crunch | cut -f 4 -d ' '`
+		SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
+		ALTNAME=""
+		DEVICE=`echo "$PARTITION" | tr -d "*" | crunch | cut -f 1 -d ' '`
+		
+		# Veja se essa partição já está em uso:
+		if egrep -i "$DEVICE " $TMP/SeTnative 1> $NDIR; then # it's been used
+			ON=`egrep -i "$DEVICE " $TMP/SeTnative | crunch | cut -f 2 -d ' '`
+			ALTNAME="$DEVICE on $ON Linux ${SIZE_MB} MB"
+		fi
+		# Add a menu item
+		if [ "$ALTNAME" = "" ]; then
+			echo "\"$NAME\" \"Linux ${SIZE_MB} MB\" \\" >> $TMP/tempscript
+			echo "false" > $TMP/SeTSKIP # this flag is used for non-root parts
+		else
+			echo "\"(FORMATADO)\" \"$ALTNAME\" \\" >> $TMP/tempscript
+		fi
+	done
+	echo "\"---\" \"(Fim da lista de partições compatíveis.)\" \\" >> $TMP/tempscript
+	echo "2> $TMP/return" >> $TMP/tempscript
 }
 
 # ask_format - Asks the user if he/she wants to format the named device
@@ -385,10 +376,6 @@ sync
 # Determine the filesystem type using blkid:
 ROOT_SYS_TYPE=$(blkid -s TYPE $ROOT_DEVICE | cut -f 2 -d = | tr -d \")
 
-# Mount the /mnt/custom filesystem:
-#mount $ROOT_DEVICE $T_PX -t $ROOT_SYS_TYPE 1> $REDIR 2> $REDIR
-
-#echo "$ROOT_DEVICE       /        $ROOT_SYS_TYPE        defaults   1   1" > $TMP/SeTnative
 printf "%-16s %-16s %-11s %-16s %-3s %s\n" "$ROOT_DEVICE" "/" "$ROOT_SYS_TYPE" "defaults" "1" "1" > $TMP/SeTnative
 echo $ROOT_DEVICE > $TMP/SeTrootdev
 
@@ -396,125 +383,87 @@ echo $ROOT_DEVICE > $TMP/SeTrootdev
 
 # More than one Linux partition
 if [ ! "`cat $TMP/SeTplist | sed -n '2 p'`" = "" ]; then
-   while [ 0 ]; do # next partition loop
-      # OK, we will set this flag, and if we find an unused partition, we
-      # change it.  If it doesn't get switched, we skip the next menu.
-      rm -f $TMP/SeTSKIP
-      echo "true" > $TMP/SeTSKIP
+	while [ 0 ]; do # next partition loop
+		# OK, we will set this flag, and if we find an unused partition, we
+		# change it.  If it doesn't get switched, we skip the next menu.
+		rm -f $TMP/SeTSKIP
+		echo "true" > $TMP/SeTSKIP
 
-      cat << EOF > $TMP/tempscript
-      dialog --backtitle "Configure outras partições Linux." \\
---title " Selecione outra partição Linux para o /mnt/custom " \\
+		cat << EOF > $TMP/tempscript
+		dialog --backtitle "Formate outras partições Linux." \\
+--title " Selecione outra partição Linux para formatar " \\
 --ok-label Selecionar --cancel-label Continuar \\
 --menu "Você parece ter mais de uma partição marcada como tipo Linux. \\
-Você pode usá-los para distribuir seu sistema Linux em mais de \\
-uma partição. Atualmente, você tem ${ROOT_DEVICE} montada como sua partição /mnt/custom. \\
-Você pode querer montar diretórios como o /mnt/custom/customcd/isofile \\
-em partições separadas. Você não deve tentar montar /etc, /livemnt ou /mnt em \\
-sua própria partição, uma vez que contêm utilitários necessários para carregar o sistema \\
-e montar partições. Além disso, não reutilizar uma partição que você já \\
-entrou antes. Por favor, selecione uma das partições Linux listadas abaixo, ou \\
-se você estiver pronto, clique <Continuar> ". 20 80 15 \\
+Você pode formata-la agora  bastando selecionar uma das partições listadas \\
+abaixo. Clique em continuar> ". 20 80 15 \\
 EOF
-      gen_part_list
+	gen_part_list
 
-      if [ "`cat $TMP/SeTSKIP`" = "true" ]; then
-         break;
-      fi
-      rm -rf $TMP/return
+	if [ "`cat $TMP/SeTSKIP`" = "true" ]; then
+		break;
+	fi
+	rm -rf $TMP/return
 
-      . $TMP/tempscript
-      if [ ! $? = 0 ]; then
-         break;
-      fi
+	. $TMP/tempscript
+	if [ ! $? = 0 ]; then
+		break;
+	fi
 
-      NEXT_PARTITION=`cat $TMP/return`
-      if [ "$NEXT_PARTITION" = "---" ]; then
-         break;
-      elif [ "$NEXT_PARTITION" = "(DISPOSITIVO MONTADO)" ]; then
-         continue;
-      fi
+	NEXT_PARTITION=`cat $TMP/return`
+	if [ "$NEXT_PARTITION" = "---" ]; then
+		break;
+	elif [ "$NEXT_PARTITION" = "(FORMATADO)" ]; then
+		continue;
+	fi
 
-      # Temos agora a partição seguinte, perguntar ao usuário o que fazer com ele:
-      ask_format $NEXT_PARTITION
+	# Temos agora a partição seguinte, perguntar ao usuário o que fazer com ele:
+	ask_format $NEXT_PARTITION
 
-      DOFORMAT="`cat $TMP/return`"
-      rm -f $TMP/return
+	DOFORMAT="`cat $TMP/return`"
+	rm -f $TMP/return
 
-      BACKT="A partição $NEXT_PARTITION Não pode ser reformatada."
-      if [ ! "$DOFORMAT" = "Não" ]; then
-        ask_fs $NEXT_PARTITION
-        NEXT_SYS_TYPE="`cat $TMP/return`"
-        rm -f $TMP/return
-        BACKT="A partição $NEXT_PARTITION será formatada como $NEXT_SYS_TYPE."
+	BACKT="A partição $NEXT_PARTITION Não pode ser reformatada."
+	if [ ! "$DOFORMAT" = "Não" ]; then
+		ask_fs $NEXT_PARTITION
+		NEXT_SYS_TYPE="`cat $TMP/return`"
+		rm -f $TMP/return
+		BACKT="A partição $NEXT_PARTITION será formatada como $NEXT_SYS_TYPE."
 
-        # criar sistema de arquivos
-        if [ "$NEXT_SYS_TYPE" = "reiser4" ]; then
-          if [ "$DOFORMAT" = "Check" ]; then
-            make_reiser4 $NEXT_PARTITION "y"
-          else
-            make_reiser4 $NEXT_PARTITION "n"
-          fi
-        elif [ "$NEXT_SYS_TYPE" = "ext3" ]; then
-          if [ "$DOFORMAT" = "Check" ]; then
-            make_ext3 $NEXT_PARTITION "y"
-          else
-            make_ext3 $NEXT_PARTITION "n"
-          fi
-        elif [ "$NEXT_SYS_TYPE" = "ext4" ]; then
-          if [ "$DOFORMAT" = "Check" ]; then
-            make_ext4 $NEXT_PARTITION "y"
-          else
-            make_ext4 $NEXT_PARTITION "n"
-          fi
-        elif [ "$NEXT_SYS_TYPE" = "reiserfs" ]; then
-          make_reiserfs $NEXT_PARTITION
-        elif [ "$NEXT_SYS_TYPE" = "btrfs" ]; then
-          make_btrfs $NEXT_PARTITION
-        elif [ "$NEXT_SYS_TYPE" = "jfs" ]; then
-          if [ "$DOFORMAT" = "Check" ]; then
-            make_jfs $NEXT_PARTITION "y"
-          else
-            make_jfs $NEXT_PARTITION "n"
-          fi
-        elif [ "$NEXT_SYS_TYPE" = "xfs" ]; then
-          make_xfs $NEXT_PARTITION
-        fi
-      fi # DOFORMAT?
+		# criar sistema de arquivos
+		if [ "$NEXT_SYS_TYPE" = "reiser4" ]; then
+			if [ "$DOFORMAT" = "Check" ]; then
+				make_reiser4 $NEXT_PARTITION "y"
+			else
+				make_reiser4 $NEXT_PARTITION "n"
+			fi
+		elif [ "$NEXT_SYS_TYPE" = "ext3" ]; then
+			if [ "$DOFORMAT" = "Check" ]; then
+				make_ext3 $NEXT_PARTITION "y"
+			else
+				make_ext3 $NEXT_PARTITION "n"
+		  fi
+		elif [ "$NEXT_SYS_TYPE" = "ext4" ]; then
+			if [ "$DOFORMAT" = "Check" ]; then
+				make_ext4 $NEXT_PARTITION "y"
+			else
+				make_ext4 $NEXT_PARTITION "n"
+			fi
+		elif [ "$NEXT_SYS_TYPE" = "reiserfs" ]; then
+			make_reiserfs $NEXT_PARTITION
+		elif [ "$NEXT_SYS_TYPE" = "btrfs" ]; then
+			make_btrfs $NEXT_PARTITION
+		elif [ "$NEXT_SYS_TYPE" = "jfs" ]; then
+			if [ "$DOFORMAT" = "Check" ]; then
+				make_jfs $NEXT_PARTITION "y"
+			else
+			make_jfs $NEXT_PARTITION "n"
+			fi
+		elif [ "$NEXT_SYS_TYPE" = "xfs" ]; then
+			make_xfs $NEXT_PARTITION
+		fi
+	fi # DOFORMAT?
 
-      # Agora pergunte ao usuário onde montar este novo sistema de arquivos:
-      dialog --backtitle " $BACKT " --title \
-" SELECIONE O PONTO DE MONTAGEM PARA $NEXT_PARTITION " --inputbox \
-"OK, Agora você precisa especificar onde deseja que a nova partição seja montada. \
-Por exemplo, se você quiser colocá-la em /mnt/custom/customcd/isofile basta digitar.\n\n \
-Onde você gostaria de montar $NEXT_PARTITION?" 12 60 2> $TMP/return
-
-
-
-      if [ ! $? = 0 ]; then
-         continue
-      fi
-
-      MTPT=`cat $TMP/return`
-      if [ "$MTPT" = "" ]; then # abort if blank
-         continue
-      fi
-      if [ "`echo "$MTPT" | cut -b1`" = " " ]; then # bail if 1st char is space
-         continue
-      fi
-      if [ ! "`echo "$MTPT" | cut -b1`" = "/" ]; then # add / to start of path
-         MTPT="/$MTPT"
-      fi
-      rm $TMP/return
-
-      # Sync before identifying and mounting the partition:
-      sync
-      
-      # Determinar o tipo de sistema de arquivos usando blkid:
-      NEXT_SYS_TYPE=$(blkid -s TYPE $NEXT_PARTITION | cut -f 2 -d = | tr -d \")
-
-      printf "%-16s %-16s %-11s %-16s %-3s %s\n" "$NEXT_PARTITION" "$MTPT" "$NEXT_SYS_TYPE" "defaults" "1" "2" >> $TMP/SeTnative
-   done # next partition loop
+	done # next partition loop
 fi # more than one Linux partition
 
 # fim do script
