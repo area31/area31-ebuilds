@@ -150,7 +150,7 @@ while [ 0 ]; do
 		if [ "$var" -ne 0 ];then
 			dialog --title " RescueCD Area31 Tools " --no-label Cancelar --yes-label Continuar --yesno \
 			"\nExtraia os arquivos da imagem sysrcd.dat,\nPressione [ENTER] para continuar..." 8 65
-			if [ "$?" -ne 0 ]; then
+			if [ "$?" -eq 0 ]; then
 				/usr/sbin/sysresccd-custom extract
 			fi
 		else
@@ -176,7 +176,7 @@ while [ 0 ]; do
 		if [ "$var" -ne 0 ];then
 			dialog --title " RescueCD Area31 Tools " --no-label Cancelar --yes-label Continuar --yesno \
 			"\nFaça CHROOT em \"/mnt/custom\",\nPressione [ENTER] para continuar..." 8 55
-			if [ "$?" -ne 0 ]; then
+			if [ "$?" -eq 0 ]; then
 				sh /usr/share/sysresccd-area31/sysresccd-area31-targets make-chroot
 			fi
 		else
@@ -209,7 +209,7 @@ while [ 0 ]; do
 		if [ "$var" -ne 0 ];then
 			dialog --title " RescueCD Area31 Tools " --no-label Cancelar --yes-label Continuar --yesno \
 			"\nGere a imagem ISO personalizada,\nPressione [ENTER] para continuar..." 8 55
-			if [ "$?" -ne 0 ]; then
+			if [ "$?" -eq 0 ]; then
 				sh /usr/share/sysresccd-area31/sysresccd-area31-targets make-iso
 			fi
 		else
