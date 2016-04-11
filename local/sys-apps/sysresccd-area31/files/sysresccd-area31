@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 #################################################################################
 # Copyright 2016 Raphael Bastos, Belo Horizonte, Minas Gerais, Brasil
@@ -62,8 +62,9 @@ while [ 0 ]; do
 	"SHOW" "Exibe os discos montados" "Exibe tanto discos quanto swap ativas" \
 	"KEYMAP" "Redefina seu mapa de teclado" "Padrão: br-abnt2" \
 	"PARTICIONADOR" "Particionador de disco" "CUIDADO: Essas ferramentas podem causar danos irreversíveis em seu disco!"  \
-	"ADDSWAP" "Configure e monte a SWAP" "" \
-	"TARGET" "Configure a partição /mnt/custom" "" \
+	"FORMAT" "Formata a partição /mnt/custom" "" \
+	"ADD-SWAP" "Configure e monte a SWAP" "" \
+	"ADD-TARGET" "Configure a partição /mnt/custom" "" \
 	"CHROOT" "Personalize  o RescueCD via chroot" "LEMBRE-SE: Antes de montar o chroot acesse a opção TARGET para montar o /mnt/custom" \
 	"GEN-ISO" "Gere uma nova imagem ISO personalizada" ""  \
 	"HORA" "Defina a hora do sistema" "Timezone: $(date +'%:z %Z')" \
@@ -102,6 +103,15 @@ if [ "$MAINSELECT" = "PARTICIONADOR" ]; then
 fi
 
 ################################################################
+# FORMAT
+
+if [ "$MAINSELECT" = "FORMAT" ]; then
+	dialog --title " RescueCD Area31 Tools " --msgbox "\n Formate o disco para o ambiente chroot,\n\
+	Pressione [ENTER] para continuar..." 8 45
+	sh /usr/share/sysresccd-area31/sysresccd-area31-format
+fi
+
+#################################################################
 # MAPA DE TECLADO
 
 if [ "$MAINSELECT" = "KEYMAP" ]; then
@@ -114,7 +124,7 @@ fi
 
 # SWAP
 
-if [ "$MAINSELECT" = "ADDSWAP" ]; then
+if [ "$MAINSELECT" = "ADD-SWAP" ]; then
 	dialog --title " RescueCD Area31 Tools " --msgbox "\n Configure a SWAP,\n\
 	Pressione [ENTER] para continuar..." 8 42
 	sh /usr/share/sysresccd-area31/sysresccd-area31-swap
@@ -123,7 +133,7 @@ fi
 ################################################################
 # TARGET
 
-if [ "$MAINSELECT" = "TARGET" ]; then
+if [ "$MAINSELECT" = "ADD-TARGET" ]; then
 	dialog --title " RescueCD Area31 Tools " --msgbox "\n Monte o disco para o ambiente chroot,\n\
 	Pressione [ENTER] para continuar..." 8 45
 	sh /usr/share/sysresccd-area31/sysresccd-area31-targets mount-disk

@@ -53,10 +53,10 @@ rm -rf ${MNTDIR}/var/tmp/portage/*
 rm -rf ${MNTDIR}/root/nohup.* ${MNTDIR}/root/.bash_history ${MNTDIR}/root/.viminfo ${MNTDIR}/root/.bash_history
 rm -rf ${MNTDIR}/var/log/messages ${MNTDIR}/var/log/wtmp ${MNTDIR}/var/log/Xorg.0.log* ${MNTDIR}/var/log/dmesg ${MNTDIR}/var/log/rc.log
 rm -rf ${MNTDIR}/etc/ssh/*key*
+rm -rf ${MNTDIR}/root/.gitconfig
 mkdir -p ${MNTDIR}/root/.ssh
 rm -rf ${MNTDIR}/etc/skel
 cp -rp ${MNTDIR}/root ${MNTDIR}/etc/skel
-rm -rf ${MNTDIR}/root/.gitconfig
 
 
 # umount
