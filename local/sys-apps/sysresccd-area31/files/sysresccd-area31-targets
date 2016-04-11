@@ -55,7 +55,7 @@ rm -rf ${MNTDIR}/var/log/messages ${MNTDIR}/var/log/wtmp ${MNTDIR}/var/log/Xorg.
 rm -rf ${MNTDIR}/etc/ssh/*key*
 mkdir -p ${MNTDIR}/root/.ssh
 rm -rf ${MNTDIR}/etc/skel
-cp -rf ${MNTDIR}/root ${MNTDIR}/etc/skel
+cp -rp ${MNTDIR}/root ${MNTDIR}/etc/skel
 rm -rf ${MNTDIR}/root/.gitconfig
 
 
