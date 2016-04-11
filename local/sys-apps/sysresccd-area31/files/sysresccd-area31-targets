@@ -57,6 +57,9 @@ rm -rf ${MNTDIR}/root/.gitconfig
 mkdir -p ${MNTDIR}/root/.ssh
 rm -rf ${MNTDIR}/etc/skel
 cp -rp ${MNTDIR}/root ${MNTDIR}/etc/skel
+rm -rf ${MNTDIR}/tmp
+mkdir ${MNTDIR}/tmp
+chmod 777 ${MNTDIR}/tmp
 
 
 # umount

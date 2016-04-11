@@ -59,17 +59,17 @@ while [ 0 ]; do
 	Selecione uma opção usando as teclas direcionais UP/DOWN e pressione [SPACE] ou [ENTER].\n\
 	Teclas alternativas também podem ser usadas: '+', '-' e [TAB]." 0 0 0 \
 	"AJUDA" "Obtenha ajuda para uso do RescueCD Area31 Tools" "" \
-	"SHOW" "Exibe os discos montados" "Exibe tanto discos quanto swap ativas" \
+	"SHOW" "Exibe os discos montados" "Exibe discos e swap ativas" \
 	"KEYMAP" "Redefina seu mapa de teclado" "Padrão: br-abnt2" \
 	"PARTICIONADOR" "Particionador de disco" "CUIDADO: Essas ferramentas podem causar danos irreversíveis em seu disco!"  \
-	"FORMAT" "Formata a partição /mnt/custom" "" \
-	"ADD-SWAP" "Configure e monte a SWAP" "" \
-	"ADD-TARGET" "Configure a partição /mnt/custom" "" \
+	"FORMAT" "Formata a partição /mnt/custom" "LEMBRE-SE: Antes de formatar particione o disco" \
+	"ADD-SWAP" "Configure e monte a SWAP" "LEMBRE-SE: Antes de montar a swap particione e crie uma partição do tipo 82" \
+	"ADD-TARGET" "Configure a partição /mnt/custom" "LEMBRE-SE: Antes de montar /mnt/custom particione e formate a partição" \
 	"CHROOT" "Personalize  o RescueCD via chroot" "LEMBRE-SE: Antes de montar o chroot acesse a opção TARGET para montar o /mnt/custom" \
-	"GEN-ISO" "Gere uma nova imagem ISO personalizada" ""  \
-	"HORA" "Defina a hora do sistema" "Timezone: $(date +'%:z %Z')" \
-	"UMOUNT" "Desmonta todos os discos montados incluso swap." "" \
-	"FINALIZAR" "Sair do do RescueCD Area31 Tools" "ATENÇÃO: É recomendado que se desmonte todos os discos incluso swap antes de sair, bastando pressionar a opção UMOUNT."  2> $TMP/hdset
+	"GEN-ISO" "Gere uma nova imagem ISO personalizada" "Antes de gerar uma ISO acesse a opção TARGET para montar o /mnt/custom"  \
+	"HORA" "Defina a hora do sistema" "Timezone atual: $(date +'%:z %Z')" \
+	"UMOUNT" "Desmonta todos os discos montados incluso swap." "Recomendável antes de reboot ou halt" \
+	"FINALIZAR" "Sair do do RescueCD Area31 Tools" "ATENÇÃO: É recomendado que se desmonte todos os discos incluso swap antes de sair, bastando acessar a opção UMOUNT."  2> $TMP/hdset
 	if [ ! $? = 0 ]; then
 	  exit
  fi

@@ -1,1 +1,0 @@
-dialog --title "ERROR: No Linux Native Partitions" --exit-label OK --textbox "/mnt/setup/nopartHELP" 22 74

@@ -1,2 +1,0 @@
-#!/bin/sh
-dialog --title "Slackware PXE Server Help" --exit-label OK --textbox "/mnt/setup/PXEhelp" 22 77
