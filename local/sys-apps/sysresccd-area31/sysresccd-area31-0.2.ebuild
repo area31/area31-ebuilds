@@ -35,6 +35,7 @@ src_install()
 	doins "${FILESDIR}"/sysresccd-area31-keymap
 	doins "${FILESDIR}"/sysresccd-area31-fixdate
 	doins "${FILESDIR}"/sysresccd-area31-showmount
+	doins "${FILESDIR}"/sysresccd-area31-format
 	doins "${FILESDIR}"/examples.tar
 	insinto /etc/init.d
 	newinitd "${FILESDIR}"/autorun autorun
