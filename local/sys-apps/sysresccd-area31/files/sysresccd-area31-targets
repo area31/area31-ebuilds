@@ -30,6 +30,12 @@ if [ "${CHECK_SYS}" = "0" ]; then
 	mount -vo bind /sys ${MNTDIR}/sys
 fi
 
+	CHECK_PORTAGE="$(mount | grep -w "${MNTDIR}/usr/portage" | wc -l)"
+if [ "${CHECK_PORTAGE}" = "0" ]; then
+	mkdir -p /mnt/custom/portage-chroot
+	mkdir -p ${MNTDIR}/usr/portage
+	mount -vo bind /mnt/custom/portage-chroot ${MNTDIR}/usr/portage
+fi
 
 if [ -e "${MNTDIR}/bin/bashlogin" ]; then
 	chroot ${MNTDIR} /bin/bashlogin
@@ -40,7 +46,7 @@ fi
 }
 
 umountchroot(){
-umount -v ${MNTDIR}/proc ${MNTDIR}/dev ${MNTDIR}/sys
+umount -v ${MNTDIR}/proc ${MNTDIR}/dev ${MNTDIR}/sys ${MNTDIR}/usr/portage
 }
 
 mkiso(){
