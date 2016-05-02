@@ -72,6 +72,7 @@ mv ${MNTDIR}/usr/portage "/mnt/custom/portage-$(date "+%d-%m-%Y-%H%M")"
 # umount
 echo -e "\nUmounting chroot....\n"
 umount ${MNTDIR}/proc ${MNTDIR}/dev ${MNTDIR}/sys
+umount ${MNTDIR}/usr/portage
 
 sleep 1
 
