@@ -66,7 +66,7 @@ cp -rp ${MNTDIR}/root ${MNTDIR}/etc/skel
 rm -rf ${MNTDIR}/tmp
 mkdir ${MNTDIR}/tmp
 chmod 777 ${MNTDIR}/tmp
-mv ${MNTDIR}/usr/portage "/mnt/custom/portage-$(date "+%d-%m-%Y-%H%M")"
+#mv ${MNTDIR}/usr/portage "/mnt/custom/portage-$(date "+%d-%m-%Y-%H%M")"
 
 
 # umount
