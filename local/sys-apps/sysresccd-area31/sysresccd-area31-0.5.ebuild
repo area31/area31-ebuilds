@@ -48,5 +48,6 @@ src_install()
 	newinitd "${FILESDIR}"/netconfig2 netconfig2
 	insinto /usr/share/backgrounds/xfce
 	doins "${FILESDIR}"/bg-blur-area31.jpg
+	dosbin "${FILESDIR}"/convert-profile-to-files.sh
 	dosbin "${FILESDIR}"/sysresccd-area31 || die
 }
