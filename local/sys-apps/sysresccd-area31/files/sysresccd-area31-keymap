@@ -197,7 +197,7 @@ teclas de seta e PageUp / PageDown para navegar por toda a lista de opções." 3
   clear
   cat << EOF
 
-    OK, o novo mapa de teclado está instalado. Agora você pode testá-lo digitando
+    OK, o novo mapa de teclado está configurado. Agora você pode testá-lo digitando
     o que quiser. Caso as teclas estejam OK, digite 1 em um linha própria para aceitar 
     o mapa e tecle [ENTER], ou 2 em uma linha e tecle [ENTER] caso deseje rejeitar o mapa de 
     teclado atual para selecionar um novo.

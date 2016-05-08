@@ -30,7 +30,6 @@ if [ -r ${TMP}/Pkeymap ]; then
 	cp ${TMP}/Pkeymap ${TMP}/SeTkeymap
 fi
 
-# Define o diretório de instalação no PATH do sistema
 # turn on color menus
 echo "on" > ${TMP}/SeTcolor
 export COLOR=on
@@ -96,7 +95,7 @@ while [ 0 ]; do
 
 	if [ "$MAINSELECT" = "PARTICIONADOR" ]; then
 		dialog --title " BEM VINDO AO PARTICIONADOR " --msgbox "\n\
-		O instalador do RescueCD Area31 precisa de algumas coisas:\n\n\
+		O RescueCD Area31 precisa de algumas coisas:\n\n\
 		1. Crie pelo menos uma partição Linux.\n\
 		2. Se possível crie uma partição SWAP (RECOMENDADO).\n\n\
 		Pressione [ENTER] para continuar" 12 60

@@ -34,9 +34,9 @@ if [ "$SWAPLIST" = "" ]; then
  dialog --title " NENHUMA PARTIÇÃO SWAP DETECTADA " --yesno "\n \
  Você não criou nenhuma partição SWAP usando\n
  'cfdisk' ou 'fdisk'.\n\n\
- Gostaria de continuar a instalação mesmo sem SWAP? " 10 56
+ Gostaria de continuar mesmo sem SWAP? " 10 56
  if [ "$?" = "1" ]; then
-  dialog --title " ABORTANDO INSTALAÇÃO " --msgbox "\n Crie uma partição SWAP usando 'cfdisk' ou 'fdisk', e tente novamente. ;)" \
+  dialog --title " ABORTANDO SWAP " --msgbox "\n Crie uma partição SWAP usando 'cfdisk' ou 'fdisk', e tente novamente. ;)" \
 8 55
  else
   touch $TMP/SeTswapskip
@@ -51,7 +51,7 @@ dialog --backtitle "RescueCD Area31 Partition Tools" \\
 Estas partições foram pré-selecionadas \\
 para serem utilizadas  como espaço de troca. \\
 Caso haja alguma partição SWAP que você \\
-não queira utilizar com esta instalação, por favor, desmarque \\
+não queira utilizar, por favor, desmarque \\
 com as teclas direcionais UP/DOWN e pressione SPACE.\n\nSe desejar \\
 utilizar todos, basta pressionar a tecla [ENTER].\n" \\
 18 70 18 \\
@@ -90,7 +90,7 @@ EOF
  --title " DESEJA CHECAR BAD BLOCK EM PARTIÇÃO SWAP? " --defaultno --yesno \
 "RescueCD Area31 Setup irá preparar seu sistema de troca (SWAP). \
 Ao formatar partições SWAP usando o 'mkswap' é possível verificar \
-BAD BLOCKs. Este não é o padrão da instalação visto que vários HDs \
+BAD BLOCKs. Este não é o padrão do RescueCD visto que vários HDs \
 modernos checam por isso o tempo todo. \
 \n\nGostaria de verificar por blocos defeituosos durante a formatação da partição SWAP?" \
 14 60

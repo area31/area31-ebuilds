@@ -17,11 +17,12 @@ DEPEND=">=dev-lang/python-2.4.0
 		sys-apps/hwsetup
 		sys-apps/sysresccd-scripts
 		sys-apps/sysresccd-custom
+		sys-apps/util-linux
         >=app-shells/bash-3.1"
 RDEPEND="${DEPEND}"
 
 src_compile() {
-	einfo "Nothing to compile"
+	einfo "Nothing to compile, scripts only"
 }
 
 src_install()
