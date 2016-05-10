@@ -9,7 +9,7 @@ if [ ! -d ${TMP} ]; then
 fi
 
 cd /
-umount ${DIR_SYSTEM}/sys ${DIR_SYSTEM}/dev ${DIR_SYSTEM}/proc ${DIR_SYSTEM} &> /dev/null
+umount ${DIR_SYSTEM}/usr/portage ${DIR_SYSTEM}/sys ${DIR_SYSTEM}/dev ${DIR_SYSTEM}/proc ${DIR_SYSTEM} &> /dev/null
 
 # gera lista de partições montadas
 mount|grep -w ${DIR_SYSTEM}|cut -d" " -f1 > ${TMP}/list-mount &> /dev/null
