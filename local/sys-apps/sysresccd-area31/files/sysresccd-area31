@@ -74,7 +74,7 @@ while [ 0 ]; do
 		exit
 	fi
 	MAINSELECT="`cat $TMP/hdset`"
-	rm $TMP/hdset
+	#rm $TMP/hdset
 
 	################################################################
 	# AJUDA
