@@ -44,7 +44,7 @@ src_install()
 	newinitd "${FILESDIR}"/autorun autorun
 	newinitd "${FILESDIR}"/dostartx dostartx
 	newinitd "${FILESDIR}"/load-fonts-keymaps load-fonts-keymaps
-	newinitd "${FILESDIR}"/sysresccd sysreccd
+	newinitd "${FILESDIR}"/sysresccd sysresccd
 	newinitd "${FILESDIR}"/netconfig2 netconfig2
 	insinto /usr/share/backgrounds/xfce
 	doins "${FILESDIR}"/bg-blur-area31.jpg
