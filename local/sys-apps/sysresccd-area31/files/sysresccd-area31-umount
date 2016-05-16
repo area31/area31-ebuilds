@@ -22,3 +22,8 @@ while read device;do
 done < ${TMP}/list-mount
 
 umount -f ${DIR_MNT}  &> /dev/null
+
+
+for partition in $(mount|egrep -wv '/livemnt/boot|/livemnt/squashfs|/livemnt/memory|/livemnt/tftpmem|/tftpboot|/run|/dev/shmZ/sys/fs/cgroupZ/tmp|/sys|\/|/dev/mqueue|/dev/shm|/dev/pts|udev on /dev type|proc on /proc type proc|/proc/sys/fs/binfmt_misc|tmpfs on /tmp type tmpfs'|awk '{print $3}'); do
+	umount -v ${partition}
+done
