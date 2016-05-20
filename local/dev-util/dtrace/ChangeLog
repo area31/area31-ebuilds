@@ -1,0 +1,11 @@
+# ChangeLog for dev-util/dtrace
+# Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
+# $Id$
+
+  13 Oct 2013; Justin Lecher <jlec@gentoo.org> dtrace-20110215.ebuild,
+  metadata.xml:
+  QA fixes
+
+  27 Oct 2011; Justin Lecher <jlec@gentoo.org> metadata.xml:
+  Removed no-herd from herd tag in metadata.xml
+

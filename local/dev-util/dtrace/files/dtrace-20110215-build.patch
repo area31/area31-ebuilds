@@ -1,0 +1,28 @@
+--- makefile	2011-03-02 17:36:55.610312840 +0100
++++ makefile	2011-03-02 17:35:31.036872267 +0100
+@@ -70,11 +70,11 @@
+ 	cd libproc/common ; $(MAKE) $(NOPWD)
+ 	cd librtld ; $(MAKE) $(NOPWD)
+ 	cd cmd/dtrace ; $(MAKE) $(NOPWD)
+-	cd cmd/ctfconvert ; $(MAKE) $(NOPWD)
+-	cd usdt/c ; $(MAKE) $(NOPWD)
++	# BROKEN: cd cmd/ctfconvert ; $(MAKE) $(NOPWD)
++	# BROKEN: cd usdt/c ; $(MAKE) $(NOPWD)
+ kernel:
+ 	tools/mkdriver.pl all
+-	tools/mkctf.sh
++	# BROKEN: tools/mkctf.sh
+ 
+ clean:
+ 	rm -rf build?*
+@@ -100,8 +100,8 @@
+ 	fi
+ 	install -m 644 -o root libdtrace/unistd.d "$(DESTDIR)"/usr/lib/dtrace
+ 	install -m 644 -o root etc/io.d "$(DESTDIR)"/usr/lib/dtrace
+-	install -m 644 -o root build/linux*.ctf "$(DESTDIR)"/usr/lib/dtrace
+-	install -m 644 -o root etc/sched.d "$(DESTDIR)"/usr/lib/dtrace
++	# MISSING install -m 644 -o root build/linux*.ctf "$(DESTDIR)"/usr/lib/dtrace
++	# BROKEN install -m 644 -o root etc/sched.d "$(DESTDIR)"/usr/lib/dtrace
+ 	scripts/mkinstall.pl -o="$(DESTDIR)"/usr/lib/dtrace
+ 
+ newf:
