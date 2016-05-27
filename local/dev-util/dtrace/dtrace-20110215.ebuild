@@ -8,7 +8,8 @@ inherit eutils linux-info
 
 DESCRIPTION="Dynamic tracing framework created (ported to Linux)"
 HOMEPAGE="http://www.crisp.demon.co.uk/blog/"
-SRC_URI="ftp://crispeditor.co.uk/pub/release/website/${PN}/${P}.tar.bz2"
+SRC_URI="ftp://crispeditor.co.uk/pub/release/website/${PN}/2011/${P}.tar.bz2"
+
 
 LICENSE="CDDL"
 SLOT="0"
@@ -27,9 +28,9 @@ DEPEND="${RDEPEND}
 src_prepare() {
 	rm build || die
 
-#	epatch \
-#		"${FILESDIR}"/${P}-destdir.patch \
-#		"${FILESDIR}"/${P}-build.patch
+	epatch \
+		"${FILESDIR}"/${P}-destdir.patch \
+		"${FILESDIR}"/${P}-build.patch
 }
 
 src_compile() {

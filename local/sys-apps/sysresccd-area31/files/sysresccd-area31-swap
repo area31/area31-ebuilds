@@ -133,3 +133,5 @@ modernos checam por isso o tempo todo. \
   rm $TMP/swapmsg
  fi  
 fi
+
+sh /usr/share/sysresccd-area31/sysresccd-area31-showmount

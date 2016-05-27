@@ -68,3 +68,11 @@ fsck -f -y ${DEVICE}
 mount ${DEVICE} ${DIR_MNT}
 
 fi
+
+  echo "Sua partição foi ativada com sucesso. O ponto de montagem pode" > $TMP/customdirmsg
+  echo "/mnt/custom será utilizado para personalização do RescueCD." >> $TMP/customdirmsg
+  echo >> $TMP/customdirmsg
+  dialog --title " TARGET /mnt/custom MONTADO " --exit-label OK --textbox $TMP/customdirmsg 7 72
+  rm $TMP/customdirmsg
+
+sh /usr/share/sysresccd-area31/sysresccd-area31-showmount
