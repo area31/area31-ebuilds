@@ -37,13 +37,12 @@ crunch () {
 # make_btrfs - Create a new btrfs filesystem on the named dev.
 make_btrfs() {
 	# get the size of the named partition
-	SIZE=`get_part_size $1`
-	SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
+	SIZE=$(get_part_size $1)
 	# output a nice status message
 	dialog --title " FORMATANDO " \
    --backtitle "Formatando $1 com sistema de arquivos btrfs." \
    --infobox "Formatando $1  \n\
-Tamanho dos blocos em MB: $SIZE_MB \n\
+Tamanho da partição: $SIZE \n\
 Sistema de arquivos: btrfs " 0 0
 	# do the format
 	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
@@ -56,12 +55,11 @@ Sistema de arquivos: btrfs " 0 0
 make_reiser4() {
 	# get the size of the named partition
 	SIZE=`get_part_size $1`
-	SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
 	# output a nice status message
 	dialog --title " FORMATANDO " \
    --backtitle "Formatando $1 com sistema de arquivos reiser4." \
    --infobox "Formatando $1  \n\
-Tamanho dos blocos em MB: $SIZE_MB \n\
+Tamanho da partição: $SIZE \n\
 Sistema de arquivos: reiser4" 0 0
 	# do the format
 	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
@@ -78,12 +76,11 @@ Sistema de arquivos: reiser4" 0 0
 make_ext3() {
 	# get the size of the named partition
 	SIZE=`get_part_size $1`
-	SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
 	# output a nice status message
 	dialog --title " FORMATANDO " \
    --backtitle "Formatando $1 com sistema de arquivos ext3." \
    --infobox "Formatando $1  \n\
-Tamanho dos blocos em MB: $SIZE_MB \n\
+Tamanho da partição: $SIZE \n\
 Sistema de arquivos: ext3" 0 0
 	# do the format
 	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
@@ -100,12 +97,11 @@ Sistema de arquivos: ext3" 0 0
 make_ext4() {
 	# get the size of the named partition
 	SIZE=`get_part_size $1`
-	SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
 	# output a nice status message
 	dialog --title " FORMATANDO " \
    --backtitle "Formatando $1 com sistema de arquivos ext4." \
    --infobox "Formatando $1  \n\
-Tamanho dos blocos em MB: $SIZE_MB \n\
+Tamanho da partição: $SIZE \n\
 Sistema de arquivos: ext4" 0 0
 	# do the format
 	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
@@ -122,12 +118,11 @@ Sistema de arquivos: ext4" 0 0
 make_jfs() {
 	# get the size of the named partition
 	SIZE=`get_part_size $1`
-	SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
 	# output a nice status message
 	dialog --title " FORMATANDO " \
    --backtitle "Formatando $1 com sistema de arquivos jfs." \
    --infobox "Formatando $1  \n\
-Tamanho dos blocos em MB: $SIZE_MB \n\
+Tamanho da partição: $SIZE \n\
 Sistema de arquivos: jfs" 0 0
 	# do the format
 	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
@@ -144,12 +139,11 @@ Sistema de arquivos: jfs" 0 0
 make_reiserfs() {
 	# get the size of the named partition
 	SIZE=`get_part_size $1`
-	SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
 	# output a nice status message
 	dialog --title " FORMATANDO " \
    --backtitle "Formatando $1 com sistema de arquivos reiserfs." \
    --infobox "Formatando $1  \n\
-Tamanho dos blocos em MB: $SIZE_MB \n\
+Tamanho da partição: $SIZE \n\
 Sistema de arquivos: reiserfs " 0 0
 	# do the format
 	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
@@ -162,12 +156,11 @@ Sistema de arquivos: reiserfs " 0 0
 make_xfs() {
 	# get the size of the named partition
 	SIZE=`get_part_size $1`
-	SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
 	# output a nice status message
 	dialog --title " FORMATANDO " \
    --backtitle "Formatando $1 com sistema de arquivos xfs." \
    --infobox "Formatando $1  \n\
-Tamanho dos blocos em MB: $SIZE_MB \n\
+Tamanho da partição: $SIZE \n\
 Sistema de arquivos: xfs " 0 0
 	# do the format
 	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
@@ -186,19 +179,21 @@ gen_part_list() {
 		fi
 		# Variables, variables, variables
 		NAME=`echo $PARTITION | crunch | cut -f 1 -d ' '`
-		SIZE=`echo "$PARTITION" | tr -d "*" | tr -d "+" | crunch | cut -f 4 -d ' '`
-		SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
+		#SIZE=`echo "$PARTITION" | tr -d "*" | tr -d "+" | crunch | cut -f 4 -d ' '`
+		PARTITION_DEV="$(echo $PARTITION|awk '{print $1}')"
+		SIZE="$(fdisk -l $PARTITION_DEV|cut -d: -f2|egrep -i 'GiB|bytes|setores|sectors'|head -1|awk '{print $1, $2}'|cut -d',' -f1)"
+		#SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
 		ALTNAME=""
 		DEVICE=`echo "$PARTITION" | tr -d "*" | crunch | cut -f 1 -d ' '`
 		
 		# Veja se essa partição já está em uso:
 		if egrep -i "$DEVICE " $TMP/SeTnative 1> $NDIR; then # it's been used
 			ON=`egrep -i "$DEVICE " $TMP/SeTnative | crunch | cut -f 2 -d ' '`
-			ALTNAME="$DEVICE on $ON Linux ${SIZE_MB} MB"
+			ALTNAME="$DEVICE on $ON Linux ${SIZE}"
 		fi
 		# Add a menu item
 		if [ "$ALTNAME" = "" ]; then
-			echo "\"$NAME\" \"Linux ${SIZE_MB} MB\" \\" >> $TMP/tempscript
+			echo "\"$NAME\" \"Linux ${SIZE}\" \\" >> $TMP/tempscript
 			echo "false" > $TMP/SeTSKIP # this flag is used for non-root parts
 		else
 			echo "\"(FORMATADO)\" \"$ALTNAME\" \\" >> $TMP/tempscript
@@ -289,7 +284,7 @@ EOF
 
 # get_part_size - Return the size in KB of the named partition.
 get_part_size() {
-   Size=`fdisk -l 2> /dev/null | egrep -i "$1 " | tr -d "*" | tr -d "+" | crunch | cut -f 4 -d ' '`
+	Size="$(fdisk -l $1|cut -d: -f2|egrep -i 'GiB|bytes|setores|sectors'|head -1|awk '{print $1, $2}'|cut -d',' -f1)"
    echo $Size
 }
 
