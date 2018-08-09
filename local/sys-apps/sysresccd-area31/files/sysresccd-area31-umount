@@ -8,8 +8,12 @@ if [ ! -d ${TMP} ]; then
 	mkdir -p ${TMP}
 fi
 
-cd /
-umount ${DIR_SYSTEM}/usr/portage ${DIR_SYSTEM}/sys ${DIR_SYSTEM}/dev ${DIR_SYSTEM}/proc ${DIR_SYSTEM} &> /dev/null
+# Desmonta o ambiente CHROOT
+cd ${DIR_SYSTEM}
+umount proc sys &> /dev/null
+umount -l dev &> /dev/null
+cd
+umount ${DIR_SYSTEM}/var/cache/portage ${DIR_SYSTEM}/var/git &> /dev/null
 
 # gera lista de partições montadas
 mount|grep -w ${DIR_SYSTEM}|cut -d" " -f1 > ${TMP}/list-mount &> /dev/null

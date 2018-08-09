@@ -1,4 +1,8 @@
 #!/bin/bash
+# obsolete on Funtoo kits
+exit 0
+##################################
+
 PROFILE_DIR="/etc/portage"
 
 if [ ! -e ${PROFILE_DIR} ]; then

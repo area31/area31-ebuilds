@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #################################################################################
-# Copyright 2016 Raphael Bastos, Belo Horizonte, Minas Gerais, Brasil
+# Copyright 2018 Raphael Bastos, Belo Horizonte, Minas Gerais, Brasil
 # All rights reserved.
 #
 # BSD License - Ou seja, faça o que quiser com esse script. }:D
@@ -9,8 +9,8 @@
 # As always, bug reports, suggestions, etc: raphaelbastos@hackstore.com.br
 #################################################################################
 
-export LANG=pt_BR.UTF-8
-export LC_ALL=pt_BR.UTF-8
+#export LANG=pt_BR.UTF-8
+#export LC_ALL=pt_BR.UTF-8
 export HISTTIMEFORMAT="%h/%d - %H:%M:%S - "
 
 DIR_MNT="/mnt/custom"

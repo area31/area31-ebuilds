@@ -1,4 +1,4 @@
-#!/sbin/runscript
+#!/sbin/openrc-run
 
 source /sbin/livecd-functions.sh
 
@@ -37,7 +37,7 @@ start()
 	if [ -n "${FONT}" ]
 	then
 	    SRC="CONSOLEFONT";INS="$SRC=\"$FONT\""
-	    sed -i -e "/^[#]*$SRC/{/^#$INS/d;/^[^#]/{/$INS/!{s/^/#/;a $INS" -e "}}}" /etc/conf.d/consolefont 
+	    sed -i -e "/^[#]*$SRC/{/^#$INS/d;/^[^#]/{/$INS/!{s/^/#/;a $INS" -e "}}}" /etc/conf.d/consolefont
 	fi
 }
 

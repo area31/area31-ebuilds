@@ -22,7 +22,7 @@ fi
 
 CHECK_DEV="$(mount | grep -w "${MNTDIR}/dev" | wc -l)"
 if [ "${CHECK_DEV}" = "0" ]; then
-	mount -vo bind /dev ${MNTDIR}/dev
+	mount -vo rbind /dev ${MNTDIR}/dev
 fi
 
 	CHECK_SYS="$(mount | grep -w "${MNTDIR}/sys" | wc -l)"
@@ -30,11 +30,18 @@ if [ "${CHECK_SYS}" = "0" ]; then
 	mount -vo bind /sys ${MNTDIR}/sys
 fi
 
-	CHECK_PORTAGE="$(mount | grep -w "${MNTDIR}/usr/portage" | wc -l)"
+	CHECK_PORTAGE="$(mount | grep -w "${MNTDIR}/var/git" | wc -l)"
 if [ "${CHECK_PORTAGE}" = "0" ]; then
+	mkdir -p /mnt/custom/meta-repo
+	mkdir -p ${MNTDIR}/var/git
+	mount -vo bind /mnt/custom/meta-repo/ ${MNTDIR}/var/git
+fi
+
+	CHECK_PORTAGE_CACHE="$(mount | grep -w "${MNTDIR}/var/cache/portage" | wc -l)"
+if [ "${CHECK_PORTAGE_CACHE}" = "0" ]; then
 	mkdir -p /mnt/custom/portage-chroot
-	mkdir -p ${MNTDIR}/usr/portage
-	mount -vo bind /mnt/custom/portage-chroot ${MNTDIR}/usr/portage
+	mkdir -p ${MNTDIR}/var/cache/portage
+	mount -vo bind /mnt/custom/portage-chroot ${MNTDIR}/var/cache/portage
 fi
 
 if [ -e "${MNTDIR}/bin/bashlogin" ]; then
@@ -46,15 +53,15 @@ fi
 }
 
 umountchroot(){
-umount -v ${MNTDIR}/proc ${MNTDIR}/dev ${MNTDIR}/sys ${MNTDIR}/usr/portage
+umount -v ${MNTDIR}/proc ${MNTDIR}/sys ${MNTDIR}/var/cache/portage ${MNTDIR}/var/git
+umount -lv ${MNTDIR}/dev
 }
 
 mkiso(){
 
 # clean
 echo -e "\nCleaning Temporary files...\n"
-
-rm -rf ${MNTDIR}/usr/portage/distfiles/*
+rm -rf ${MNTDIR}/var/cache/portage/distfiles/*
 rm -rf ${MNTDIR}/var/tmp/portage/*
 rm -rf ${MNTDIR}/root/nohup.* ${MNTDIR}/root/.bash_history ${MNTDIR}/root/.viminfo ${MNTDIR}/root/.bash_history
 rm -rf ${MNTDIR}/var/log/messages ${MNTDIR}/var/log/wtmp ${MNTDIR}/var/log/Xorg.0.log* ${MNTDIR}/var/log/dmesg ${MNTDIR}/var/log/rc.log
@@ -66,13 +73,14 @@ cp -rp ${MNTDIR}/root ${MNTDIR}/etc/skel
 rm -rf ${MNTDIR}/tmp
 mkdir ${MNTDIR}/tmp
 chmod 777 ${MNTDIR}/tmp
-#mv ${MNTDIR}/usr/portage "/mnt/custom/portage-$(date "+%d-%m-%Y-%H%M")"
 
 
 # umount
 echo -e "\nUmounting chroot....\n"
-umount ${MNTDIR}/proc ${MNTDIR}/dev ${MNTDIR}/sys
-umount ${MNTDIR}/usr/portage
+umount ${MNTDIR}/proc ${MNTDIR}/sys
+umount -l ${MNTDIR}/dev
+umount ${MNTDIR}/var/git
+umount ${MNTDIR}/var/cache/portage
 
 sleep 1
 
@@ -109,7 +117,7 @@ case "$1" in
 		mkiso
         ;;
     version)
-        echo "beta"
+        echo "4.0"
         exit $?
         ;;
     *)
