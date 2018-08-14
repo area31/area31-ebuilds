@@ -2,7 +2,7 @@ EAPI="2"
 
 inherit eutils
 
-DESCRIPTION="admin scripts provided with RescueCD Area31 Hackerspace"
+DESCRIPTION="Admin scripts provided with RescueCD Area31 Hackerspace"
 HOMEPAGE="https://www.area31.net.br/wiki/RescueCD_oficial"
 
 LICENSE="BSD"
@@ -17,12 +17,14 @@ DEPEND=">=dev-lang/python-2.4.0
 		sys-apps/hwsetup
 		sys-apps/sysresccd-scripts
 		sys-apps/sysresccd-custom
+		app-backup/fsarchiver
 		sys-apps/util-linux
+		app-admin/pwgen
         >=app-shells/bash-3.1"
 RDEPEND="${DEPEND}"
 
 src_compile() {
-	einfo "Nothing to compile, scripts only"
+	einfo "Nothing to compile, install scripts only"
 }
 
 src_install()
@@ -44,15 +46,11 @@ src_install()
 	doins "${FILESDIR}"/sysresccd-area31-fixdate
 	doins "${FILESDIR}"/sysresccd-area31-showmount
 	doins "${FILESDIR}"/sysresccd-area31-format
-	doins "${FILESDIR}"/examples.tar
 	insinto /etc/init.d
 	newinitd "${FILESDIR}"/autorun autorun
 	newinitd "${FILESDIR}"/dostartx dostartx
 	newinitd "${FILESDIR}"/load-fonts-keymaps load-fonts-keymaps
 	newinitd "${FILESDIR}"/sysresccd sysresccd
 	newinitd "${FILESDIR}"/netconfig2 netconfig2
-	insinto /usr/share/backgrounds/xfce
-	doins "${FILESDIR}"/bg-blur-area31.jpg
-	dosbin "${FILESDIR}"/convert-profile-to-files.sh
 	dosbin "${FILESDIR}"/sysresccd-area31 || die
 }

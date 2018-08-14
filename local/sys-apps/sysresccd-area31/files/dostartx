@@ -14,7 +14,7 @@ start() {
 	if grep -q "dostartx" /proc/cmdline
 	then
 		ebegin "Starting the graphical environment"
-		start-stop-daemon --start --quiet --user root --env SHELL="/bin/zsh" \
+		start-stop-daemon --start --quiet --user root --env SHELL="/bin/bash" \
 			--pidfile $PIDFILE --exec $DAEMON --background --chdir $CWD \
 			--stdout $LOGFILE --make-pidfile -- $ARGS
 		eend $?

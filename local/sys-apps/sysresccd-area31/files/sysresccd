@@ -1,11 +1,12 @@
 #!/sbin/openrc-run
 
+# provided by app-misc/livecd-tools
 source /sbin/livecd-functions.sh
 
 depend()
 {
 	before autorun tigervnc
-	after pwgen sshd portmap
+	after sshd
 }
 
 start()
@@ -14,16 +15,7 @@ start()
 
 	CMDLINE="$(cat /proc/cmdline)"
 
-	# ---- create file /var/log/lastlog so that ssh does not complain in the logs ----
-	touch /var/log/lastlog
-
-	# ---- create various directories ----
-	mkdir -p /var/log/samba
-	mkdir -p /var/log/glusterfs
-	mkdir -p /var/cache/revdep-rebuild
-	mkdir -p /var/run/dhcp
 	mkdir -p /var/lib/misc
-	chown dhcp:dhcp /var/run/dhcp
 
 	# ---- disable screensaver in the console ----
 	setterm -blank 0 -powersave off
