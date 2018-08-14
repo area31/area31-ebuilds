@@ -1,7 +1,6 @@
 #!/bin/sh
 
 DIR_MNT="/mnt/custom"
-ustomcd/files"/d
 TMP="/tmp/sysresccd-area31"
 
 if [ ! -d ${TMP} ]; then
