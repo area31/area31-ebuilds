@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR_MNT="/mnt/custom"
-DIR_SYSTEM="${DIR_SYSTEM}/customcd/files"
+ustomcd/files"/d
 TMP="/tmp/sysresccd-area31"
 
 if [ ! -d ${TMP} ]; then

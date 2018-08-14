@@ -97,6 +97,8 @@ sleep 1
 sync
 
 echo -e "\nFinished.\n"
+read -n 1 -s -r -p "Press any key to continue"
+
 }
 
 

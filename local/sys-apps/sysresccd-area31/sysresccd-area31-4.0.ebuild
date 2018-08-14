@@ -27,6 +27,11 @@ src_compile() {
 
 src_install()
 {
+	insinto /etc/area31
+	doins "${FILESDIR}"/area31-logo-menu-lxqt.png
+	doins "${FILESDIR}"/Bg-blur-area31_1920_x_1200.png
+	doins "${FILESDIR}"/Bg-blur-area31-2017_1920_x_1200.png
+	doins "${FILESDIR}"/logo_linux_clut224.ppm
 	insinto /usr/share/"${PN}"
 	doins "${FILESDIR}"/sysresccd-area31-umount
 	doins "${FILESDIR}"/sysresccd-area31-mount

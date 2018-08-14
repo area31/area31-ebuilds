@@ -9,7 +9,7 @@ if [ ! -d ${TMP} ]; then
 fi
 
 # Desmonta o ambiente CHROOT
-cd ${DIR_SYSTEM}
+cd ${DIR_SYSTEM} &> /dev/null
 umount proc sys &> /dev/null
 umount -l dev &> /dev/null
 cd
