@@ -9,17 +9,17 @@ if [ ! -d ${TMP} ]; then
 fi
 
 
-echo "br-abnt2" > $TMP/SeTkeymap
+echo "us" > $TMP/SeTkeymap
 if [ ! -d $TMP ]; then
   mkdir -p $TMP
 fi
 while [ 0 ]; do
 dialog --title " SELEÇÃO DE MAPA DE TECLADO " --menu "Você pode selecionar \
 um dos mapas de teclado a seguir. Se você não selecionar um mapa de teclado, \
-'br-abnt2' (Teclado padrão Brasileiro) será o padrão. Use os botões ACIMA / \
-teclas de seta e PageUp / PageDown para navegar por toda a lista de opções." 35 55 25 \
-"qwerty/br-abnt2" "" \
+'us' será o padrão. Use os botões ACIMA / teclas de seta e PageUp / PageDown \
+para navegar por toda a lista de opções." 35 55 25 \
 "qwerty/us" "" \
+"qwerty/br-abnt2" "" \
 "qwerty/uk" "" \
 "azerty/azerty" "" \
 "azerty/be-latin1" "" \
@@ -196,8 +196,8 @@ teclas de seta e PageUp / PageDown para navegar por toda a lista de opções." 3
   cat << EOF
 
     OK, o novo mapa de teclado está configurado. Agora você pode testá-lo digitando
-    o que quiser. Caso as teclas estejam OK, digite 1 em um linha própria para aceitar 
-    o mapa e tecle [ENTER], ou 2 em uma linha e tecle [ENTER] caso deseje rejeitar o mapa de 
+    o que quiser. Caso as teclas estejam OK, digite 1 em um linha própria para aceitar
+    o mapa e tecle [ENTER], ou 2 em uma linha e tecle [ENTER] caso deseje rejeitar o mapa de
     teclado atual para selecionar um novo.
 
 EOF
@@ -216,7 +216,7 @@ else
   rm -f $TMP/$MAPNAME
   rm -f $TMP/SeTkeymap $TMP/Pkeymap
  # Clear bad selection:
- loadkeys br-abnt2
+ loadkeys us
   continue;
 fi
 done

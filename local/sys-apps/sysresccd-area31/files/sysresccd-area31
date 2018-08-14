@@ -63,7 +63,6 @@ while [ 0 ]; do
 	"EXTRACT" "Extraia os arquivos da imagem \"sysrcd.dat\" para o diretório \"/mnt/custom\"" "LEMBRE-SE: Antes de extrair a imagem acesse a opção \"ADD-TARGET\" para montar o \"/mnt/custom\"" \
 	"CHROOT" "Personalize  o RescueCD via chroot" "LEMBRE-SE: Antes de montar o chroot acesse a opção \"ADD-TARGET\" para montar o \"/mnt/custom\"" \
 	"GEN-ISO" "Gere uma nova imagem ISO personalizada" "Antes de gerar uma ISO acesse a opção \"ADD-TARGET\" para montar o \"/mnt/custom\""  \
-	"DATE-TIME" "Defina a hora do sistema" "Timezone atual: $(date +'%:z %Z')" \
 	"UMOUNT" "Desmonta todos os discos montados incluso swap." "Recomendável antes de reboot ou halt" \
 	"EXIT" "Sair do do RescueCD Area31 Tools" "ATENÇÃO: É recomendado que se desmonte todos os discos incluso swap antes de sair, bastando acessar a opção \"UMOUNT\"."  2> $TMP/hdset
 	if [ ! $? = 0 ]; then
@@ -188,13 +187,6 @@ while [ 0 ]; do
 	fi
 
 	#################################################################
-	# configura hora do RescueCD Area31
-
-	if [ "${MAINSELECT}" = "DATE-TIME" ]; then
-		sh /usr/share/sysresccd-area31/sysresccd-area31-fixdate
-	fi
-
-	########################################################3
 	# GEN-ISO
 
 	if [ "${MAINSELECT}" = "GEN-ISO" ]; then
@@ -218,13 +210,6 @@ while [ 0 ]; do
 			Press [ENTER] return to main menu" 16 76
 			continue
 		fi
-	fi
-
-	#######################################################
-	# configura hora do RescueCD Area31
-
-	if [ "${MAINSELECT}" = "DATE-TIME" ]; then
-		sh /usr/share/sysresccd-area31/sysresccd-area31-fixdate
 	fi
 
 	#######################################################

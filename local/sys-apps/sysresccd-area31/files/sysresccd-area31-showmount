@@ -7,7 +7,7 @@ if [ ! -d ${TMP} ]; then
 	mkdir -p ${TMP}
 fi
 
-echo -e "\n# Discos montados:\n" > ${TMP}/disks.txt
+echo -e "\n# Mounted partitions:\n" > ${TMP}/disks.txt
 df -hT|egrep -wv '/livemnt|udev|none|shm|tmpfs' >> ${TMP}/disks.txt
 
 echo -e "\n\n\n\n\n\n\n\n\n# SWAP ativa:\n" >> ${TMP}/disks.txt

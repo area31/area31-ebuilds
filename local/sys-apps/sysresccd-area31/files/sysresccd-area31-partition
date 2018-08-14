@@ -15,7 +15,6 @@ sync
 
 fdisk -l 2> /dev/null | egrep -i 'Linux$' | sort 1> $TMP/SeTplist 2> /dev/null
 
-#LISTA=ls -lG /dev/disk/by-uuid/|grep root |cut -d'/' -f3
 ls -1 /sys/block/|grep sd[a-z] > $TMP/SeTdevices
 ARQUIVO="$TMP/SeTdevices"
 
@@ -25,10 +24,9 @@ dialog --backtitle "RescueCD Area31 Partition Tools" \
 10 35 6 $(cat $ARQUIVO | cut -d: -f1 | sed s,$," # ",) 2> $TMP/selectHD
 
 if [ ! $? = 0 ]; then
- rm $TMP/selectHD
- exit
+	rm $TMP/selectHD
+	exit
 fi
-
 
 DEVICE=$( cat $TMP/selectHD )
 rm $TMP/selectHD
@@ -41,18 +39,14 @@ dialog --backtitle "RescueCD Area31 Partition Tools" \
 "FDISK" "Configure o dispositivo \"${DEVICE}\" usando o 'fdisk'" \
 2> $TMP/select
 if [ ! $? = 0 ]; then
- rm $TMP/select
- exit
+	rm $TMP/select
+	exit
 fi
 
 SELECT_CONFIGURE="`cat $TMP/select`"
 rm -f $TMP/select
 if [ "${SELECT_CONFIGURE}" = "CFDISK" ]; then
-
-cfdisk /dev/$DEVICE
-
+	cfdisk /dev/$DEVICE
 elif [ "${SELECT_CONFIGURE}" = "FDISK" ]; then
-
-fdisk /dev/$DEVICE
-
+	fdisk /dev/$DEVICE
 fi

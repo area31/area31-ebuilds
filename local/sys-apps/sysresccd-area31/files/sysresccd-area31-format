@@ -38,11 +38,11 @@ make_btrfs() {
 	# get the size of the named partition
 	SIZE=$(get_part_size $1)
 	# output a nice status message
-	dialog --title " FORMATANDO " \
-   --backtitle "Formatando $1 com sistema de arquivos btrfs." \
-   --infobox "Formatando $1  \n\
-Tamanho da partição: $SIZE \n\
-Sistema de arquivos: btrfs " 0 0
+	dialog --title " FORMAT PARTITION " \
+   --backtitle "Format $1 using btrfs." \
+   --infobox "Format $1  \n\
+Size: $SIZE \n\
+Filesystem: btrfs " 0 0
 	# do the format
 	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
 		umount $1
@@ -55,11 +55,11 @@ make_reiser4() {
 	# get the size of the named partition
 	SIZE=`get_part_size $1`
 	# output a nice status message
-	dialog --title " FORMATANDO " \
-   --backtitle "Formatando $1 com sistema de arquivos reiser4." \
-   --infobox "Formatando $1  \n\
-Tamanho da partição: $SIZE \n\
-Sistema de arquivos: reiser4" 0 0
+	dialog --title " FORMAT PARTITION " \
+   --backtitle "Format $1 using reiser4." \
+   --infobox "Format $1  \n\
+Size: $SIZE \n\
+Filesystem: reiser4" 0 0
 	# do the format
 	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
 		umount $1 2> $NDIR
@@ -76,11 +76,11 @@ make_ext3() {
 	# get the size of the named partition
 	SIZE=`get_part_size $1`
 	# output a nice status message
-	dialog --title " FORMATANDO " \
-   --backtitle "Formatando $1 com sistema de arquivos ext3." \
-   --infobox "Formatando $1  \n\
-Tamanho da partição: $SIZE \n\
-Sistema de arquivos: ext3" 0 0
+	dialog --title " FORMAT PARTITION " \
+   --backtitle "Format $1 using ext3." \
+   --infobox "Format $1  \n\
+Size: $SIZE \n\
+Filesystem: ext3" 0 0
 	# do the format
 	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
 		umount $1
@@ -97,11 +97,11 @@ make_ext4() {
 	# get the size of the named partition
 	SIZE=`get_part_size $1`
 	# output a nice status message
-	dialog --title " FORMATANDO " \
-   --backtitle "Formatando $1 com sistema de arquivos ext4." \
-   --infobox "Formatando $1  \n\
-Tamanho da partição: $SIZE \n\
-Sistema de arquivos: ext4" 0 0
+	dialog --title " FORMAT PARTITION " \
+   --backtitle "Format $1 using ext4." \
+   --infobox "Format $1  \n\
+Size: $SIZE \n\
+Filesystem: ext4" 0 0
 	# do the format
 	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
 		umount $1 2> $NDIR
@@ -118,11 +118,11 @@ make_jfs() {
 	# get the size of the named partition
 	SIZE=`get_part_size $1`
 	# output a nice status message
-	dialog --title " FORMATANDO " \
-   --backtitle "Formatando $1 com sistema de arquivos jfs." \
-   --infobox "Formatando $1  \n\
-Tamanho da partição: $SIZE \n\
-Sistema de arquivos: jfs" 0 0
+	dialog --title " FORMAT PARTITION " \
+   --backtitle "Format $1 using jfs." \
+   --infobox "Format $1  \n\
+Size: $SIZE \n\
+Filesystem: jfs" 0 0
 	# do the format
 	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
 		umount $1 2> $NDIR
@@ -139,11 +139,11 @@ make_reiserfs() {
 	# get the size of the named partition
 	SIZE=`get_part_size $1`
 	# output a nice status message
-	dialog --title " FORMATANDO " \
-   --backtitle "Formatando $1 com sistema de arquivos reiserfs." \
-   --infobox "Formatando $1  \n\
-Tamanho da partição: $SIZE \n\
-Sistema de arquivos: reiserfs " 0 0
+	dialog --title " FORMAT PARTITION " \
+   --backtitle "Format $1 using reiserfs." \
+   --infobox "Format $1  \n\
+Size: $SIZE \n\
+Filesystem: reiserfs " 0 0
 	# do the format
 	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
 		umount $1 2> $NDIR
@@ -156,11 +156,11 @@ make_xfs() {
 	# get the size of the named partition
 	SIZE=`get_part_size $1`
 	# output a nice status message
-	dialog --title " FORMATANDO " \
-   --backtitle "Formatando $1 com sistema de arquivos xfs." \
-   --infobox "Formatando $1  \n\
-Tamanho da partição: $SIZE \n\
-Sistema de arquivos: xfs " 0 0
+	dialog --title " FORMAT PARTITION " \
+   --backtitle "Format $1 using xfs." \
+   --infobox "Format $1  \n\
+Size: $SIZE \n\
+Filesystem: xfs " 0 0
 	# do the format
 	if mount | egrep -i "$1 " 1> $NDIR 2> $NDIR ; then
 		umount $1
@@ -195,7 +195,7 @@ gen_part_list() {
 			echo "\"$NAME\" \"Linux ${SIZE}\" \\" >> $TMP/tempscript
 			echo "false" > $TMP/SeTSKIP # this flag is used for non-root parts
 		else
-			echo "\"(FORMATADO)\" \"$ALTNAME\" \\" >> $TMP/tempscript
+			echo "\"(COMPLETE)\" \"$ALTNAME\" \\" >> $TMP/tempscript
 		fi
 	done
 	echo "\"---\" \"(Fim da lista de partições compatíveis.)\" \\" >> $TMP/tempscript
@@ -204,13 +204,13 @@ gen_part_list() {
 
 # ask_format - Asks the user if he/she wants to format the named device
 ask_format() {
-   dialog --backtitle "Deseja formatar ${1}?" \
-   --title " FORMATAR PARTIÇÃO $1 " --menu "Se sua partição não estiver formatada será necessário \
+   dialog --backtitle "Do you want to format ${1}?" \
+   --title " FORMAT PARTITION $1 " --menu "You need a Linux Partition \
 fazê-lo. NOTA: Isto apagará TODOS os dados existentes. \
-Deseja formatar esta partição?" 12 86 3 \
-   "Formatar" "Formatação rápida sem verificação de setores defeituosos" \
-   "Checar" "Formatação demorada, com verificação setores defeituosos (BAD BLOCKS)" \
-   "Não" "Não, não formatar esta partição." 2> $TMP/return
+Do you want to format this partition??" 12 86 3 \
+   "Format" "Fast formats" \
+   "Checar" "Make filesystem slowly with check sectors (BAD BLOCKS)" \
+   "Não" "No, exit.." 2> $TMP/return
    if [ ! $? = 0 ]; then
      rm -f $TMP/return
      exit
@@ -222,30 +222,30 @@ Deseja formatar esta partição?" 12 86 3 \
 ask_fs() {
   unset BTRFS REISER4 EXT3 JFS REISERFS XFS
   if egrep -i -wq reiser4 /proc/filesystems 1> $NDIR 2> $NDIR ; then
-    REISER4="Reiser4 é um tradicional sistema de arquivos no Linux, é rápido e estável. "
+    REISER4="Reiser4 Journaling Filesystem. "
   fi
   if egrep -i -wq ext3 /proc/filesystems 1> $NDIR 2> $NDIR ; then
-    EXT3="Ext3 é a versão com suporte a Journaling do sistema de arquivos Reiser4. "
+    EXT3="Ext3 Journaling Filesystem. "
   fi
   if egrep -i -wq ext4 /proc/filesystems 1> $NDIR 2> $NDIR ; then
-    EXT4="Ext4 é o sucessor do sistema de arquivos Ext3. "
+    EXT4="Ext4 Journaling Filesystem. "
     DEFAULT=ext4
   fi
   if egrep -i -wq reiserfs /proc/filesystems 1> $NDIR 2> $NDIR ; then
-    REISERFS="ReiserFS é um sistema de arquivos com suporte a Journaling que armazena todos os arquivos\n e nomes de arquivos em uma estrutura de árvore balanceada. "
+    REISERFS="ReiserFS Journaling Filesystem. "
   fi
   if egrep -i -wq btrfs /proc/filesystems 1> $NDIR 2> $NDIR ; then
-    BTRFS="BTRFS é um sistema de arquivos B-tree, diversamente pronuncia-se FS Butter, Better FS ou B-tree FS.\n Não recomendável para  partição de BOOT por problemas de compatibilidade com o GRUB. "
+    BTRFS="BTRFS Copy-on-Write B-tree Filesystem.\n Not recommended for BOOT partition due to GRUB compatibility issues. "
   fi
   if egrep -i -wq jfs /proc/filesystems 1> $NDIR 2> $NDIR ; then
-    JFS="JFS é um sistema de arquivos Journaled desenvolvido e utilizado pela IBM.\n Não recomendável para  partição de BOOT por problemas de compatibilidade com o GRUB. "
+    JFS="JFS IBM's Journaled Filesystem.\n Not recommended for BOOT partition due to GRUB compatibility issues. "
   fi
   if egrep -i -wq xfs /proc/filesystems 1> $NDIR 2> $NDIR ; then
-    XFS="XFS é um sistema de arquivos SGI Journaling original do IRIX. "
+    XFS="XFS SGI's Journaling Filesystem.\n Not recommended for BOOT partition due to GRUB compatibility issues. "
   fi
   cat << EOF > $TMP/tempscript
 dialog --title " SELECIONE O SISTEMA DE ARQUIVOS PARA $1 " \\
---backtitle "Partição $1 será formatada." \\
+--backtitle "Partição $1 formating." \\
 --default-item $DEFAULT --menu \\
 "Por favor selecione o tipo de sistema de arquivos para usar com o dispositivo \\
 especificado.\nAqui estão as descrições dos sistemas de arquivos:\n\n \\
@@ -384,11 +384,10 @@ if [ ! "`cat $TMP/SeTplist | sed -n '2 p'`" = "" ]; then
 		echo "true" > $TMP/SeTSKIP
 
 		cat << EOF > $TMP/tempscript
-		dialog --backtitle "Formate outras partições Linux." \\
---title " Selecione outra partição Linux para formatar " \\
+		dialog --backtitle "Format another partition Linux." \\
+--title " Select another partition Linux " \\
 --ok-label Selecionar --cancel-label Continuar \\
---menu "Você parece ter mais de uma partição marcada como tipo Linux. \\
-Você pode formata-la agora  bastando selecionar uma das partições listadas \\
+--menu "You can format it now by simply selecting one of the listed partitions \\
 abaixo. Clique em continuar> ". 20 80 15 \\
 EOF
 	gen_part_list
@@ -406,7 +405,7 @@ EOF
 	NEXT_PARTITION=`cat $TMP/return`
 	if [ "$NEXT_PARTITION" = "---" ]; then
 		break;
-	elif [ "$NEXT_PARTITION" = "(FORMATADO)" ]; then
+	elif [ "$NEXT_PARTITION" = "(COMPLETE)" ]; then
 		continue;
 	fi
 
@@ -416,12 +415,12 @@ EOF
 	DOFORMAT="`cat $TMP/return`"
 	rm -f $TMP/return
 
-	BACKT="A partição $NEXT_PARTITION Não pode ser reformatada."
+	BACKT="Partition $NEXT_PARTITION Error to make FS"
 	if [ ! "$DOFORMAT" = "Não" ]; then
 		ask_fs $NEXT_PARTITION
 		NEXT_SYS_TYPE="`cat $TMP/return`"
 		rm -f $TMP/return
-		BACKT="A partição $NEXT_PARTITION será formatada como $NEXT_SYS_TYPE."
+		BACKT="Partition $NEXT_PARTITION using FS $NEXT_SYS_TYPE."
 
 		# criar sistema de arquivos
 		if [ "$NEXT_SYS_TYPE" = "reiser4" ]; then

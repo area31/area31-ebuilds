@@ -43,7 +43,6 @@ src_install()
 	doins "${FILESDIR}"/sysresccd-area31-help
 	doins "${FILESDIR}"/sysresccd-area31-help.txt
 	doins "${FILESDIR}"/sysresccd-area31-keymap
-	doins "${FILESDIR}"/sysresccd-area31-fixdate
 	doins "${FILESDIR}"/sysresccd-area31-showmount
 	doins "${FILESDIR}"/sysresccd-area31-format
 	insinto /etc/init.d
