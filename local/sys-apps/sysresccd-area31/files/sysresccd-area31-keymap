@@ -14,10 +14,10 @@ if [ ! -d $TMP ]; then
   mkdir -p $TMP
 fi
 while [ 0 ]; do
-dialog --title " SELEÇÃO DE MAPA DE TECLADO " --menu "Você pode selecionar \
-um dos mapas de teclado a seguir. Se você não selecionar um mapa de teclado, \
-'us' será o padrão. Use os botões ACIMA / teclas de seta e PageUp / PageDown \
-para navegar por toda a lista de opções." 35 55 25 \
+dialog --title " KEYBOARD MAP SELECTION " --menu "You can select \
+one of the keyboard maps following. If you doesn't select a keyboard map \
+'us' will be default. Use keys [UP] / [DOWN] and [PageUp] / [PageDown] \
+to navigate through the options list." 35 55 25 \
 "qwerty/us" "" \
 "qwerty/br-abnt2" "" \
 "qwerty/uk" "" \
@@ -195,10 +195,10 @@ para navegar por toda a lista de opções." 35 55 25 \
   clear
   cat << EOF
 
-    OK, o novo mapa de teclado está configurado. Agora você pode testá-lo digitando
-    o que quiser. Caso as teclas estejam OK, digite 1 em um linha própria para aceitar
-    o mapa e tecle [ENTER], ou 2 em uma linha e tecle [ENTER] caso deseje rejeitar o mapa de
-    teclado atual para selecionar um novo.
+    OK the new keyboard map is configured. Now you can test it typing whatever you
+    wish. Case the mapping is adequate type 1 in a new line to accept the mapping
+    and type [ENTER] or 2 in a new line and type [ENTER] case you wish to reject
+    the actual keyboard mapping to select a new one.
 
 EOF
   echo -n "    "

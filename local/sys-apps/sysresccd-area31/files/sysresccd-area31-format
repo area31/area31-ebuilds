@@ -12,15 +12,15 @@ mkdir -p $TMP
 
 rm -rf $TMP/SeTdevices
 
-dialog --title " RescueCD Area31 Tools "    --backtitle " RescueCD Area31 Tools "    --infobox "\n Checando tabela de partições..." 5 40
-# desmontando tudo q estiver montado
-dialog --yesno "\n Será necessário desmontar todos os discos incluso SWAP para continuar com esta operação. Deseja continuar?\n" 8 66 && swapoff -a && sh /usr/share/sysresccd-area31/sysresccd-area31-umount && sync
+dialog --title " RescueCD Area31 Tools "    --backtitle " RescueCD Area31 Tools "    --infobox "\n Checking partition tables..." 5 40
+# unmounting everything
+dialog --yesno "\n It'll be needed unmounting all disks including SWAP to continue this operation. Continue?\n" 8 66 && swapoff -a && sh /usr/share/sysresccd-area31/sysresccd-area31-umount && sync
 
 ALTNAME=""
 rm -f $TMP/SeTnative
 rm -f $TMP/tempscript
 
-# define lista de partições
+# define partitions list
 fdisk -l 2> /dev/null | egrep -i 'Linux$' | sort 1> $TMP/SeTplist 2> /dev/null
 
 ##############################################################################
@@ -180,12 +180,12 @@ gen_part_list() {
 		NAME=`echo $PARTITION | crunch | cut -f 1 -d ' '`
 		#SIZE=`echo "$PARTITION" | tr -d "*" | tr -d "+" | crunch | cut -f 4 -d ' '`
 		PARTITION_DEV="$(echo $PARTITION|awk '{print $1}')"
-		SIZE="$(fdisk -l $PARTITION_DEV|cut -d: -f2|egrep -i 'GiB|bytes|setores|sectors'|head -1|awk '{print $1, $2}'|cut -d',' -f1)"
+		SIZE="$(fdisk -l $PARTITION_DEV|cut -d: -f2|egrep -i 'GiB|bytes|sectors'|head -1|awk '{print $1, $2}'|cut -d',' -f1)"
 		#SIZE_MB=`echo "scale=1; ${SIZE}/1024" | bc`
 		ALTNAME=""
 		DEVICE=`echo "$PARTITION" | tr -d "*" | crunch | cut -f 1 -d ' '`
 		
-		# Veja se essa partição já está em uso:
+		# Verify if partition is being used:
 		if egrep -i "$DEVICE " $TMP/SeTnative 1> $NDIR; then # it's been used
 			ON=`egrep -i "$DEVICE " $TMP/SeTnative | crunch | cut -f 2 -d ' '`
 			ALTNAME="$DEVICE on $ON Linux ${SIZE}"
@@ -198,19 +198,19 @@ gen_part_list() {
 			echo "\"(COMPLETE)\" \"$ALTNAME\" \\" >> $TMP/tempscript
 		fi
 	done
-	echo "\"---\" \"(Fim da lista de partições compatíveis.)\" \\" >> $TMP/tempscript
+	echo "\"---\" \"(End of compatible partitions list.)\" \\" >> $TMP/tempscript
 	echo "2> $TMP/return" >> $TMP/tempscript
 }
 
 # ask_format - Asks the user if he/she wants to format the named device
 ask_format() {
    dialog --backtitle "Do you want to format ${1}?" \
-   --title " FORMAT PARTITION $1 " --menu "You need a Linux Partition \
-fazê-lo. NOTA: Isto apagará TODOS os dados existentes. \
+   --title " FORMAT PARTITION $1 " --menu "You need a Linux partition \
+to do it. NOTE: This WILL ERASE ALL existing data. \
 Do you want to format this partition??" 12 86 3 \
-   "Format" "Fast formats" \
-   "Checar" "Make filesystem slowly with check sectors (BAD BLOCKS)" \
-   "Não" "No, exit.." 2> $TMP/return
+   "Format" "Fast format" \
+   "Check" "Make filesystem slowly with check sectors (BAD BLOCKS)" \
+   "No" "No, exit.." 2> $TMP/return
    if [ ! $? = 0 ]; then
      rm -f $TMP/return
      exit
@@ -244,11 +244,11 @@ ask_fs() {
     XFS="XFS SGI's Journaling Filesystem.\n Not recommended for BOOT partition due to GRUB compatibility issues. "
   fi
   cat << EOF > $TMP/tempscript
-dialog --title " SELECIONE O SISTEMA DE ARQUIVOS PARA $1 " \\
---backtitle "Partição $1 formating." \\
+dialog --title " SELECT FILESYSTEM FOR $1 " \\
+--backtitle "Formatting $1 partition." \\
 --default-item $DEFAULT --menu \\
-"Por favor selecione o tipo de sistema de arquivos para usar com o dispositivo \\
-especificado.\nAqui estão as descrições dos sistemas de arquivos:\n\n \\
+"Please select a filesystem type to be used in this specified \\
+device.\nHere are the filesystems descriptions:\n\n \\
 $REISER4\n\n $EXT3\n\n $EXT4\n\n $JFS\n\n $REISERFS\n\n $BTRFS\n\n $XFS\n\n" \\
 0 0 0 \\
 EOF
@@ -283,7 +283,7 @@ EOF
 
 # get_part_size - Return the size in KB of the named partition.
 get_part_size() {
-	Size="$(fdisk -l $1|cut -d: -f2|egrep -i 'GiB|bytes|setores|sectors'|head -1|awk '{print $1, $2}'|cut -d',' -f1)"
+	Size="$(fdisk -l $1|cut -d: -f2|egrep -i 'GiB|bytes|sectors'|head -1|awk '{print $1, $2}'|cut -d',' -f1)"
    echo $Size
 }
 
@@ -301,10 +301,10 @@ fi
 cat /dev/null >> $TMP/SeTnative
 
 cat << EOF > $TMP/tempscript
-dialog --backtitle " Configurando partição /mnt/custom do RescueCD Area31" \\
---title "Selecione a partição /mnt/custom do RescueCD Area31 Tools:" --ok-label Selecionar --cancel-label Continuar --menu \\
-"Por favor, selecione uma partição da lista seguinte para usar como \\
-partição /mnt/custom do RescueCD Area31 Tools." 15 80 15 \\
+dialog --backtitle " Configuring RescueCD Area31 Tools /mnt/custom partition " \\
+--title "Select RescueCD Area31 Tools /mnt/custom partition:" --ok-label Select --cancel-label Continue --menu \\
+"Please select a partition from the following list to be used as \\
+RescueCD Area31 Tools /mnt/custom partition." 15 80 15 \\
 EOF
 gen_part_list
 
@@ -386,9 +386,9 @@ if [ ! "`cat $TMP/SeTplist | sed -n '2 p'`" = "" ]; then
 		cat << EOF > $TMP/tempscript
 		dialog --backtitle "Format another partition Linux." \\
 --title " Select another partition Linux " \\
---ok-label Selecionar --cancel-label Continuar \\
+--ok-label Select --cancel-label Continue \\
 --menu "You can format it now by simply selecting one of the listed partitions \\
-abaixo. Clique em continuar> ". 20 80 15 \\
+below. Click continue> ". 20 80 15 \\
 EOF
 	gen_part_list
 
@@ -409,20 +409,20 @@ EOF
 		continue;
 	fi
 
-	# Temos agora a partição seguinte, perguntar ao usuário o que fazer com ele:
+	# We have now the partition, ask user what to do with it:
 	ask_format $NEXT_PARTITION
 
 	DOFORMAT="`cat $TMP/return`"
 	rm -f $TMP/return
 
 	BACKT="Partition $NEXT_PARTITION Error to make FS"
-	if [ ! "$DOFORMAT" = "Não" ]; then
+	if [ ! "$DOFORMAT" = "No" ]; then
 		ask_fs $NEXT_PARTITION
 		NEXT_SYS_TYPE="`cat $TMP/return`"
 		rm -f $TMP/return
 		BACKT="Partition $NEXT_PARTITION using FS $NEXT_SYS_TYPE."
 
-		# criar sistema de arquivos
+		# create filesystem
 		if [ "$NEXT_SYS_TYPE" = "reiser4" ]; then
 			if [ "$DOFORMAT" = "Check" ]; then
 				make_reiser4 $NEXT_PARTITION "y"

@@ -8,7 +8,7 @@ mkdir -p $TMP
 
 rm -rf $TMP/SeTdevices
 
-# desmontando tudo q estiver montado
+# unmounting everything
 swapoff -a
 /usr/share/sysresccd-area31/sysresccd-area31-umount
 sync
@@ -16,12 +16,12 @@ sync
 fdisk -l 2> /dev/null | egrep -i 'Linux$' | sort 1> $TMP/SeTplist 2> /dev/null
 
 ls -1 /sys/block/|grep sd[a-z] > $TMP/SeTdevices
-ARQUIVO="$TMP/SeTdevices"
+FILE="$TMP/SeTdevices"
 
 dialog --backtitle "RescueCD Area31 Partition Tools" \
- --title " SELECIONE UM DISPOSITIVO " \
- --menu 'Selecione o dispositivo desejado para ser PARTICIONADO:' \
-10 35 6 $(cat $ARQUIVO | cut -d: -f1 | sed s,$," # ",) 2> $TMP/selectHD
+ --title " SELECT A DEVICE " \
+ --menu 'Select the device to be PARTITIONED:' \
+10 35 6 $(cat $FILE | cut -d: -f1 | sed s,$," # ",) 2> $TMP/selectHD
 
 if [ ! $? = 0 ]; then
 	rm $TMP/selectHD
@@ -32,11 +32,11 @@ DEVICE=$( cat $TMP/selectHD )
 rm $TMP/selectHD
 
 dialog --backtitle "RescueCD Area31 Partition Tools" \
---title " SELECIONE UMA FERRAMENTA DE PARTICIONAMENTO " --menu \
-"Por favor escolha uma ferramenta abaixo para prosseguir com o particionamento:\n" \
+--title " SELECT A PARTITIONING TOOL " --menu \
+"Please select a partitioning tool below to proceed with partitioning:\n" \
 11 70 9 \
-"CFDISK" "Configure o dispositivo \"${DEVICE}\" usando o 'cfdisk' " \
-"FDISK" "Configure o dispositivo \"${DEVICE}\" usando o 'fdisk'" \
+"CFDISK" "Configure \"${DEVICE}\" device using 'cfdisk' " \
+"FDISK" "Configure \"${DEVICE}\" device using 'fdisk'" \
 2> $TMP/select
 if [ ! $? = 0 ]; then
 	rm $TMP/select
