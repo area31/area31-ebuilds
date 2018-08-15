@@ -40,9 +40,9 @@ else
 	dialog --title " NO LINUX PARTITION DETECTED " \
 	--msgbox "\n It seems that there are no Linux partitions on this machine.\
 	\n\n You will need to create at least one for RescueCD Area31 Tools\n\
-	 To do it you'll need to select option 'PARTITION-EDITOR' in main menu\n\
+	 To do it you'll need to select 'PARTITION-EDITOR' option in main menu\n\
 	 and create the partitions using  'cfdisk' or 'fdisk'\n\n\
-	 For more informations select option 'HELP' in the following menu.\n\n\
+	 For more informations select 'HELP' option in the following menu.\n\n\
 	 Remember creating a SWAP partition with at least 2GB" 15 71
 fi
 
@@ -52,19 +52,19 @@ fi
 while [ 0 ]; do
 	dialog --title " RescueCD Area31 Tools " --item-help --menu "Welcome to RescueCD Area31 Tools!\n\n\
 	Select an option using keys [UP]/[DOWN] and press [SPACE] or [ENTER].\n\
-	Alternate keys can be used as also: [+]/[-] and [TAB]." 0 0 0 \
+	Alternate keys can be used as also: [+]/[-] and [TAB] respectively." 0 0 0 \
 	"HELP" "Obtain help to use RescueCD Area31 Tools" "Obtain help to use RescueCD Area31 Tools" \
 	"SHOW" "Show active disks and swap" "Show active disks and swap" \
 	"KEYMAP" "Configure keymap" "Default: \"us\"" \
-	"PARTITION-EDITOR" "Partition editor" "CUIDADO: Those tools can cause IRREPARABLE damage on your hard disk!"  \
+	"PARTITION-EDITOR" "Partition editor" "CAUTION: Those tools can cause IRREPARABLE DAMAGE on your hard disk!"  \
 	"FORMAT" "Format partition \"/mnt/custom\"" "REMEMBER: Partition your disk before formatting" \
 	"ADD-SWAP" "Configure and mount SWAP" "REMEMBER: Partition your disk and create a type \"82 (SWAP)\" partition before mounting SWAP" \
 	"ADD-TARGET" "Configure partition \"/mnt/custom\"" "REMEMBER: Partition the disk and format it before mounting \"/mnt/custom\"" \
-	"EXTRACT" "Extract files from image \"sysrcd.dat\" to directory \"/mnt/custom\"" "REMEMBER: Select \"ADD-TARGET\" on the main menu before extracting the image to mount \"/mnt/custom\"" \
-	"CHROOT" "Customize your RescueCD using chroot" "REMEMBER: Select \"ADD-TARGET\" on the main menu before chrooting into \"/mnt/custom\"" \
+	"EXTRACT" "Extract files from image \"sysrcd.dat\" to \"/mnt/custom\" directory" "REMEMBER: Select \"ADD-TARGET\" option on the main menu before extracting the image to mount \"/mnt/custom\"" \
+	"CHROOT" "Customize your RescueCD using chroot" "REMEMBER: Select \"ADD-TARGET\" option on the main menu before chrooting into \"/mnt/custom\"" \
 	"GEN-ISO" "Generate a new custom ISO image" "REMEMBER: Select \"ADD-TARGET\" on the main menu to mount \"/mnt/custom\" before generating an ISO"  \
 	"UMOUNT" "Unmount all disks including swap." "Recommended before reboot or halt" \
-	"EXIT" "Exit RescueCD Area31 Tools" "ATTENTION: Its recommended to unmount all disks including swap before exiting. Select \"UMOUNT\" on the main menu to unmount all disks including swap."  2> $TMP/hdset
+	"EXIT" "Exit RescueCD Area31 Tools" "ATTENTION: It's recommended to unmount all disks including swap before exiting. Select \"UMOUNT\" option on the main menu to unmount all disks including swap."  2> $TMP/hdset
 	if [ ! $? = 0 ]; then
 		exit
 	fi
@@ -177,7 +177,7 @@ while [ 0 ]; do
 			dialog --title " ERROR CONFIGURING RESCUECD " --msgbox "\n\
 			RescueCD Area31 Tools needs a mouted "/mnt/custom" partition:\n\n\
 			1. Select at least one partition for chroot environment\n\
-			from RescueCD using "ADD-TARGET" option on main menu\n\n\
+			from RescueCD using "ADD-TARGET" option on the main menu\n\n\
 			2. If possible, create a SWAP partition (recommended)\n
 			\n
 			if necessary, configure keymap\n\n
@@ -216,7 +216,7 @@ while [ 0 ]; do
 	# Umount all partitions
 
 	if [ "${MAINSELECT}" = "UMOUNT" ]; then
-		dialog --title " RescueCD Area31 Tools " --msgbox "\n Umount all partitions, including /mnt/custom!,\n\
+		dialog --title " RescueCD Area31 Tools " --msgbox "\n Umount all partitions, including '/mnt/custom'!,\n\
 		Press [ENTER] to continue..." 8 62
 		sh /usr/share/sysresccd-area31/sysresccd-area31-showmount
 		sh /usr/share/sysresccd-area31/sysresccd-area31-targets umount-disk

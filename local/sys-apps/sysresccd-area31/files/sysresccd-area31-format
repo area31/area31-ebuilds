@@ -14,7 +14,7 @@ rm -rf $TMP/SeTdevices
 
 dialog --title " RescueCD Area31 Tools "    --backtitle " RescueCD Area31 Tools "    --infobox "\n Checking partition tables..." 5 40
 # unmounting everything
-dialog --yesno "\n It'll be needed unmounting all disks including SWAP to continue this operation. Continue?\n" 8 66 && swapoff -a && sh /usr/share/sysresccd-area31/sysresccd-area31-umount && sync
+dialog --yesno "\n Unmounting all disks including SWAP will be needed to continue this operation. Continue?\n" 8 66 && swapoff -a && sh /usr/share/sysresccd-area31/sysresccd-area31-umount && sync
 
 ALTNAME=""
 rm -f $TMP/SeTnative
@@ -209,7 +209,7 @@ ask_format() {
 to do it. NOTE: This WILL ERASE ALL existing data. \
 Do you want to format this partition??" 12 86 3 \
    "Format" "Fast format" \
-   "Check" "Make filesystem slowly with check sectors (BAD BLOCKS)" \
+   "Check" "Make filesystem slowly with sectors checking (BAD BLOCKS)" \
    "No" "No, exit.." 2> $TMP/return
    if [ ! $? = 0 ]; then
      rm -f $TMP/return
@@ -301,10 +301,10 @@ fi
 cat /dev/null >> $TMP/SeTnative
 
 cat << EOF > $TMP/tempscript
-dialog --backtitle " Configuring RescueCD Area31 Tools /mnt/custom partition " \\
+dialog --backtitle " Configuring RescueCD Area31 Tools '/mnt/custom' partition " \\
 --title "Select RescueCD Area31 Tools /mnt/custom partition:" --ok-label Select --cancel-label Continue --menu \\
 "Please select a partition from the following list to be used as \\
-RescueCD Area31 Tools /mnt/custom partition." 15 80 15 \\
+RescueCD Area31 Tools '/mnt/custom' partition." 15 80 15 \\
 EOF
 gen_part_list
 

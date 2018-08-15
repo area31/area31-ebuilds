@@ -32,7 +32,7 @@ RescueCD Area31 console.
 # "Virtual" consoles and scrollback
 
 Now, the screen you're looking into is probably VIRTUAL CONSOLE
-NUMBER ONE, (or /dev/tty1 on Linux-speech, so to speak). Normally there are
+NUMBER ONE, (or '/dev/tty1' on Linux-speech, so to speak). Normally there are
 a number of available virtual consoles. When you enter the system,
 there will be six consoles. To alternate between them use Alt-F1, Alt-F2, Alt-F3
 for autologin use Alt-F4, Alt-F5 and Alt-F6 to login with a specific user.
@@ -62,7 +62,7 @@ bundled with Linux. If you are using a br-abnt2 keyboard you can skip this optio
 # Partitioning your disk
 
 To customize your RescueCD it will be needed to separate a Linux partition
-to be mounted at /mnt/custom for the scripts copy all files needed for a perfect
+to be mounted at '/mnt/custom' for the scripts copy all files needed for a perfect
 customization. A chroot environment will be available as also for hot changes to
 be done like compiling or removing softwares utilizing Portage or any other way desired.
 
@@ -82,7 +82,7 @@ and a good filesystem like EXT4 or reiserfs.
 
 The amount of hard disk space you will need to dedicate to Linux depends on which
 type of software you pretend to compile and how much space you have available.
-My Linux partition in mnt/custom has something like 90 GB. If you have spare disk space
+My Linux partition in '/mnt/custom' has something like 90 GB. If you have spare disk space
 it will be easier to compile and test eventual bugs noting that logs consume a large
 amount of disk space. Big software projects also require a large amount of disk
 space to compile like libreOffice demands 8 GB or firefox that require 6 GB of cache.
@@ -100,7 +100,7 @@ version in command line. Most people probably will say 'cfdisk' or 'gparted' unl
 he's a dinossaur like me preferring good old 'fdisk'. Anyway, anyone will do the work.
 
 Certify yourself to use partition type "83 (Linux)" or type "82 (Linux swap)" so that
-RescueCD Area31 Tools can recognize and mount them in /mnt/custom and swap. In 'fdisk'
+RescueCD Area31 Tools can recognize and mount them in '/mnt/custom' and swap. In 'fdisk'
 type 't' for it and 'w' to write changes.
 
 If you prefer an easy to use graphical partitiong tool, you can use 'gparted' creating all
@@ -166,7 +166,7 @@ works, run to the hills.
 
 FINALIZE: This ends RescueCD Area31 Tools.
 
-Have fun using or customizing RescueCD Area31s!
+Have fun using or customizing RescueCD Area31!
 
 
 
