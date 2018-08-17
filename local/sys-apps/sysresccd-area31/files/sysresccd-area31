@@ -169,7 +169,7 @@ while [ 0 ]; do
 
 		if [ "$var" -ne 0 ];then
 			dialog --title " RescueCD Area31 Tools " --no-label Cancel --yes-label Continue --yesno \
-			"\CHROOT into \"/mnt/custom\",\nPress [ENTER] to continue..." 8 55
+			"CHROOT into \"/mnt/custom\",\nPress [ENTER] to continue..." 8 55
 			if [ "$?" -eq 0 ]; then
 				sh /usr/share/sysresccd-area31/sysresccd-area31-targets make-chroot
 			fi
