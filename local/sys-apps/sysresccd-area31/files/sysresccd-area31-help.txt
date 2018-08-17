@@ -141,26 +141,22 @@ If you wish, use ADDSWAP option in the main menu to format and mount in a pratic
 
 
 
-
-
 # RescueCD Customization
 
 If you wish to customize the RescueCD you need to access the main menu
 and format a Linux partition following previous hints. I tend to follow
 the following order to customize the RescueCD:
 
-ADDSWAP (to configure my swap partition)
-TARGET (to configure my Linux partitions)
-CONFIGURE (to configure or mount chroot environment)
-GENERATE (to generate a custom ISO image)
+ADD-SWAP (to configure my swap partition)
+ADD-TARGET (to configure my Linux partitions)
+CHROOT (to configure or mount chroot environment)
+GEN-ISO (to generate a custom ISO image)
 
 I hope that those options would be used in an intuitive manner. Just by reading
 carefully the options presented on the screen and remembering that both use and
 customization require advanced knowledge of Linux systems structure. If you doesn't
 know what a filesystem is or how does a kernel works or how does a liveCD environment
 works, run to the hills.
-
-
 
 
 
@@ -174,4 +170,6 @@ Have fun using or customizing RescueCD Area31!
 
 ---
 Raphael Bastos - mailto: raphaelbastos@hackstore.com.br
+
 https://www.area31.net.br/wiki/RescueCD_oficial
+https://www.funtoo.org/Make_your_own_RescueCD_based_on_Funtoo_Linux
