@@ -4,21 +4,24 @@ EAPI="7"
 
 inherit eutils mount-boot
 
-DESCRIPTION="Kernel sys-kernel/gentoo-sources binary provided by Area31 Hackerspace"
+DESCRIPTION="Kernel binary provided by Area31 Hackerspace + sys-kernel/gentoo-sources"
 HOMEPAGE="https://area31.net.br/wiki/LiveCD_oficial"
 SRC_URI="https://area31.net.br/downloads/ebuilds/releases/${P}.tar.bz2"
 
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="amd64"
-IUSE=""
+IUSE="kernel-source"
 
-DEPEND="app-arch/tar"
-RDEPEND="${DEPEND}"
-
+RDEPEND="app-arch/tar
+		kernel-source? ( =sys-kernel/gentoo-sources-${PV}[symlink] )
+"
+DEPEND="${RDEPEND}
+	app-arch/tar
+"
 src_compile() {
 	einfo ""
-	einfo "Nothing to compile, install kernel modules and image only"
+	einfo "Nothing to compile, only install kernel files."
 	einfo ""
 }
 
