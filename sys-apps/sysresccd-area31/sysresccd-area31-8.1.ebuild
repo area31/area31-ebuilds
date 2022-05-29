@@ -52,8 +52,6 @@ src_install()
 	insinto /etc/init.d
 	newinitd "${S}"/autorun autorun
 	newinitd "${S}"/dostartx dostartx
-	newinitd "${S}"/load-fonts-keymaps load-fonts-keymaps
-	newinitd "${S}"/sysresccd sysresccd
 	newinitd "${S}"/netconfig2 netconfig2
 	dosbin "${S}"/sysresccd-scripts/autorun
 	dosbin "${S}"/sysresccd-scripts/knx-hdinstall
